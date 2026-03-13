@@ -69,6 +69,22 @@ export const addCredits = mutation({
   },
 });
 
+export const listOrders = query({
+  args: { clerkId: v.string() },
+  handler: async (ctx, args) => {
+    const user = await ctx.db
+      .query("users")
+      .withIndex("by_clerk_id", (q) => q.eq("clerkId", args.clerkId))
+      .first();
+    if (!user) return [];
+    return ctx.db
+      .query("orders")
+      .withIndex("by_user", (q) => q.eq("userId", user._id))
+      .order("desc")
+      .take(50);
+  },
+});
+
 export const deductCredit = mutation({
   args: { clerkId: v.string() },
   handler: async (ctx, args) => {

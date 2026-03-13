@@ -257,6 +257,9 @@ function AppPageContent() {
           <Link href="/#pricing" className="text-muted text-sm font-medium hover:text-terracotta transition-colors hidden md:block">
             Pricing
           </Link>
+          <Link href="/account" className="text-muted text-sm font-medium hover:text-terracotta transition-colors hidden md:block">
+            Account
+          </Link>
           <SignedOut>
             <SignInButton>
               <button className="text-muted text-sm font-medium hover:text-terracotta">Sign In</button>
