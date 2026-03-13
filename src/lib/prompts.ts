@@ -52,6 +52,33 @@ const FINE_DINING_PROMPT =
   "Polished, premium presentation. " +
   "Keep the same dish and food - elevate to fine dining caliber. Output a single professional food photograph.";
 
+const STREET_FOOD_PROMPT =
+  "Transform this food photo into a high-energy street food photograph. Apply: " +
+  "Bold, punchy saturation and high contrast. " +
+  "Vivid, appetite-stimulating colors that pop on a phone screen. " +
+  "Dynamic close-up composition emphasizing texture, steam, and freshness. " +
+  "Optimized for delivery app thumbnails - UberEats, DoorDash, Grubhub. " +
+  "Raw energy and craveability - make it look irresistible at a glance. " +
+  "Keep the same dish and food - amplify its visual impact and street appeal. Output a single professional food photograph.";
+
+const RUSTIC_PROMPT =
+  "Transform this food photo into a rustic, artisan food photograph. Apply: " +
+  "Matte, earthy tones - raw umber, slate, warm grey. " +
+  "Textured surfaces implied - dark wood, stone, linen. " +
+  "Soft, natural side lighting with gentle shadows. " +
+  "Handcrafted, farm-to-table, farmers market aesthetic. " +
+  "Honest, unpolished beauty - nothing too perfect or staged. " +
+  "Keep the same dish and food - make it feel crafted and soulful. Output a single professional food photograph.";
+
+const VIBRANT_PROMPT =
+  "Transform this food photo into a vibrant, social-media-optimized photograph. Apply: " +
+  "Maximum color saturation and clarity - every hue at full intensity. " +
+  "Crisp, sharp detail throughout the dish. " +
+  "Bright, even lighting with no harsh shadows. " +
+  "Colors that stop the scroll on Instagram, TikTok, and food apps. " +
+  "Hyper-appetizing, almost hyperreal - the platonic ideal of the dish. " +
+  "Keep the same dish and food - make every color and texture sing. Output a single professional food photograph.";
+
 export const ART_DIRECTION_STYLES = {
   editorial: { id: "editorial", label: "Editorial", description: "Clean, high-end menu shot", prompt: EDITORIAL_PROMPT },
   natural: { id: "natural", label: "Natural", description: "Bright, fresh, organic", prompt: NATURAL_PROMPT },
@@ -59,6 +86,9 @@ export const ART_DIRECTION_STYLES = {
   warm: { id: "warm", label: "Warm & Golden", description: "Golden hour, cozy", prompt: WARM_PROMPT },
   minimal: { id: "minimal", label: "Minimal", description: "Scandinavian, clean", prompt: MINIMAL_PROMPT },
   fineDining: { id: "fineDining", label: "Fine Dining", description: "Luxurious, refined", prompt: FINE_DINING_PROMPT },
+  streetFood: { id: "streetFood", label: "Street Food", description: "Bold, punchy, delivery-optimized", prompt: STREET_FOOD_PROMPT },
+  rustic: { id: "rustic", label: "Rustic", description: "Earthy, artisan, farm-to-table", prompt: RUSTIC_PROMPT },
+  vibrant: { id: "vibrant", label: "Vibrant", description: "Hyper-saturated, social-ready", prompt: VIBRANT_PROMPT },
 };
 
 export type StyleId = keyof typeof ART_DIRECTION_STYLES;

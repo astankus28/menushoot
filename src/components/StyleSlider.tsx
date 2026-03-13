@@ -45,6 +45,24 @@ const STYLES: { id: string; label: string; description: string; url: string }[] 
     description: "Luxury plating, deep shadows, jewel tones",
     url: "https://res.cloudinary.com/dnhcs54zz/image/upload/v1773418320/menushoot/transforms/lbbthufhuhvfvyspcvli.png",
   },
+  {
+    id: "streetFood",
+    label: "Street Food",
+    description: "Bold, punchy, delivery-optimized",
+    url: "",
+  },
+  {
+    id: "rustic",
+    label: "Rustic",
+    description: "Earthy, artisan, farm-to-table",
+    url: "",
+  },
+  {
+    id: "vibrant",
+    label: "Vibrant",
+    description: "Hyper-saturated, social-ready",
+    url: "",
+  },
 ];
 
 // ── Drag slider ───────────────────────────────────────────────────────────────
