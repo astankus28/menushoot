@@ -32,6 +32,11 @@ export default function LandingPage() {
             </Link>
           </li>
           <li>
+            <Link href="/account" className="text-muted text-sm font-medium tracking-wide hover:text-terracotta transition-colors">
+              Account
+            </Link>
+          </li>
+          <li>
             <Link href="/account" className="bg-terracotta text-white py-2.5 px-5 rounded text-sm font-medium hover:bg-brown transition-colors">
               Get Started
             </Link>
