@@ -167,12 +167,12 @@ export default function LandingPage() {
         </div>
       </section>
 
-      <section id="pricing" className="py-24 md:py-28 px-6 md:px-20 scroll-mt-24">
+      <section id="pricing" className="py-24 md:py-28 px-6 md:px-20 scroll-mt-24 text-center">
         <p className="text-terracotta text-xs font-medium tracking-[0.18em] uppercase mb-4">Pricing</p>
         <h2 className="font-serif text-3xl md:text-4xl text-brown leading-tight mb-5">Simple, transparent<br />packages</h2>
-        <p className="text-muted max-w-md mb-14">No hidden fees. Pay per dish or choose a monthly plan.</p>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-4xl">
-          <div className="p-8 rounded-lg border border-brown/10 bg-warm-white">
+        <p className="text-muted max-w-md mx-auto mb-14">No hidden fees. Pay per dish or choose a monthly plan.</p>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-4xl mx-auto">
+          <div className="p-8 rounded-lg border border-brown/10 bg-warm-white text-left">
             <p className="text-xs tracking-[0.14em] uppercase text-terracotta font-medium mb-4">Trial</p>
             <div className="font-serif text-3xl text-brown">$99</div>
             <p className="text-muted text-sm mt-2 mb-6">3 dish images</p>
@@ -183,7 +183,7 @@ export default function LandingPage() {
             </ul>
             <BuyButton productId="trial" variant="outline" />
           </div>
-          <div className="p-8 rounded-lg border-2 border-terracotta bg-brown text-cream relative">
+          <div className="p-8 rounded-lg border-2 border-terracotta bg-brown text-cream relative text-left">
             <span className="absolute -top-3 left-1/2 -translate-x-1/2 bg-terracotta text-white text-[10px] tracking-wider uppercase px-4 py-1 rounded-full">Most Popular</span>
             <p className="text-xs tracking-[0.14em] uppercase text-gold-light font-medium mb-4 mt-2">Full Menu</p>
             <div className="font-serif text-3xl text-cream">$549</div>
@@ -195,7 +195,7 @@ export default function LandingPage() {
             </ul>
             <BuyButton productId="full" variant="filled" />
           </div>
-          <div className="p-8 rounded-lg border border-brown/10 bg-warm-white">
+          <div className="p-8 rounded-lg border border-brown/10 bg-warm-white text-left">
             <p className="text-xs tracking-[0.14em] uppercase text-terracotta font-medium mb-4">Agency Pro</p>
             <div className="font-serif text-3xl text-brown">$999<span className="text-base font-sans font-light">/mo</span></div>
             <p className="text-muted text-sm mt-2 mb-6">75 images/month</p>
