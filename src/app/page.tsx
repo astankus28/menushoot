@@ -32,7 +32,7 @@ export default function LandingPage() {
             </Link>
           </li>
           <li>
-            <Link href="/app" className="bg-terracotta text-white py-2.5 px-5 rounded text-sm font-medium hover:bg-brown transition-colors">
+            <Link href="/account" className="bg-terracotta text-white py-2.5 px-5 rounded text-sm font-medium hover:bg-brown transition-colors">
               Get Started
             </Link>
           </li>
@@ -51,7 +51,7 @@ export default function LandingPage() {
             Send us your existing photos — even iPhone snaps. We deliver polished, professional menu imagery in 48 hours. No studio, no scheduling, no hassle.
           </p>
           <div className="flex flex-wrap gap-4">
-            <Link href="/app" className="inline-block bg-terracotta text-white py-4 px-8 rounded font-medium hover:bg-brown transition-all hover:-translate-y-0.5 hover:shadow-lg">
+            <Link href="/account" className="inline-block bg-terracotta text-white py-4 px-8 rounded font-medium hover:bg-brown transition-all hover:-translate-y-0.5 hover:shadow-lg">
               Try It Now
             </Link>
             <Link href="#how" className="inline-flex items-center gap-2 text-brown font-medium hover:gap-3 transition-all">
@@ -222,7 +222,7 @@ export default function LandingPage() {
               ✉ hello@menushoot.ai
             </a>
             <Link
-              href="/app"
+              href="/account"
               className="inline-flex items-center justify-center gap-2 border border-cream/30 text-cream py-4 px-8 rounded font-medium hover:border-cream hover:bg-cream/5 transition-colors"
             >
               Try It Now →
