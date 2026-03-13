@@ -1,0 +1,29 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --cream: #faf6ee;
+  --charcoal: #1c1a17;
+  --brown: #3d2b1f;
+  --terracotta: #c4622d;
+  --terra-light: #e8845a;
+  --gold: #c49a3c;
+  --gold-light: #e8c96a;
+  --sage: #7a8c6e;
+  --muted: #8a7e72;
+}
+
+body {
+  @apply bg-cream text-charcoal antialiased;
+}
+
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+
+@keyframes fadeSlideDown {
+  from { opacity: 0; transform: translate(-50%, -8px); }
+  to   { opacity: 1; transform: translate(-50%, 0); }
+}
