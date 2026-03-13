@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { ClerkProvider } from "@clerk/nextjs";
 import { ConvexClientProvider } from "@/components/ConvexClientProvider";
-import { ErrorBoundary } from "@/components/ErrorBoundary";
 import { Playfair_Display, DM_Sans } from "next/font/google";
 import "./globals.css";
 
@@ -38,9 +37,7 @@ export default function RootLayout({
     >
       <ConvexClientProvider>
         <html lang="en" className={`${playfair.variable} ${dmSans.variable}`}>
-          <body className="font-sans min-h-screen">
-            <ErrorBoundary>{children}</ErrorBoundary>
-          </body>
+          <body className="font-sans min-h-screen">{children}</body>
         </html>
       </ConvexClientProvider>
     </ClerkProvider>

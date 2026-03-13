@@ -1,6 +1,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { BuyButton } from "@/components/BuyButton";
+import { StyleSlider } from "@/components/StyleSlider";
 
 export default function LandingPage() {
   return (
@@ -26,8 +27,8 @@ export default function LandingPage() {
             </Link>
           </li>
           <li>
-            <Link href="/account" className="text-muted text-sm font-medium tracking-wide hover:text-terracotta transition-colors">
-              Account
+            <Link href="#contact" className="text-muted text-sm font-medium tracking-wide hover:text-terracotta transition-colors">
+              Contact
             </Link>
           </li>
           <li>
@@ -51,7 +52,7 @@ export default function LandingPage() {
           </p>
           <div className="flex flex-wrap gap-4">
             <Link href="/app" className="inline-block bg-terracotta text-white py-4 px-8 rounded font-medium hover:bg-brown transition-all hover:-translate-y-0.5 hover:shadow-lg">
-              Get Your Free Sample
+              Try It Now
             </Link>
             <Link href="#how" className="inline-flex items-center gap-2 text-brown font-medium hover:gap-3 transition-all">
               See how it works
@@ -64,7 +65,7 @@ export default function LandingPage() {
               <span className="text-muted text-xs tracking-wider">Turnaround</span>
             </div>
             <div>
-              <strong className="block font-serif text-2xl text-brown mb-1">10+</strong>
+              <strong className="block font-serif text-2xl text-brown mb-1">16+</strong>
               <span className="text-muted text-xs tracking-wider">Years Experience</span>
             </div>
             <div>
@@ -107,7 +108,12 @@ export default function LandingPage() {
       <section id="how" className="py-24 md:py-28 px-6 md:px-20 scroll-mt-24">
         <p className="text-terracotta text-xs font-medium tracking-[0.18em] uppercase mb-4">The Process</p>
         <h2 className="font-serif text-3xl md:text-4xl text-brown leading-tight mb-5">Three steps to a<br />stunning menu</h2>
-        <p className="text-muted max-w-md mb-16">No scheduling. No studio time. No travel. Just great food photography delivered to your inbox.</p>
+        <p className="text-muted max-w-md mb-12">No scheduling. No studio time. No travel. Just great food photography delivered to your inbox.</p>
+
+        <div className="mb-20">
+          <StyleSlider />
+        </div>
+
         <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
           <div className="p-8 rounded-lg bg-warm-white border border-brown/10 relative hover:-translate-y-1 hover:shadow-xl transition-all">
             <span className="absolute top-5 right-7 font-serif text-4xl text-terracotta/20 font-bold">01</span>
@@ -119,7 +125,7 @@ export default function LandingPage() {
             <span className="absolute top-5 right-7 font-serif text-4xl text-terracotta/20 font-bold">02</span>
             <span className="text-3xl block mb-5">🎨</span>
             <h3 className="font-serif text-lg text-brown mb-3">We craft the visuals</h3>
-            <p className="text-muted text-sm leading-relaxed">Our AI tools — guided by 10+ years of professional food photography — generate polished hero shots. Every image is art directed.</p>
+            <p className="text-muted text-sm leading-relaxed">Our AI tools — guided by 16 years of professional food photography — generate polished hero shots. Every image is art directed.</p>
           </div>
           <div className="p-8 rounded-lg bg-warm-white border border-brown/10 relative hover:-translate-y-1 hover:shadow-xl transition-all">
             <span className="absolute top-5 right-7 font-serif text-4xl text-terracotta/20 font-bold">03</span>
@@ -195,6 +201,36 @@ export default function LandingPage() {
             </ul>
             <BuyButton productId="agency" variant="outline" />
           </div>
+        </div>
+      </section>
+
+      {/* Contact */}
+      <section id="contact" className="py-24 md:py-28 px-6 md:px-20 bg-brown text-cream scroll-mt-24">
+        <div className="max-w-2xl">
+          <p className="text-gold text-xs font-medium tracking-[0.18em] uppercase mb-4">Get In Touch</p>
+          <h2 className="font-serif text-3xl md:text-4xl leading-tight mb-5">
+            Questions before you buy?
+          </h2>
+          <p className="text-cream/70 max-w-md mb-10 leading-relaxed">
+            Not sure which package is right for you, or want to see a sample transformation with one of your own photos first? Send a message — usually respond same day.
+          </p>
+          <div className="flex flex-col sm:flex-row gap-4">
+            <a
+              href="mailto:hello@menushoot.ai"
+              className="inline-flex items-center justify-center gap-2 bg-terracotta text-white py-4 px-8 rounded font-medium hover:bg-terra-light transition-colors"
+            >
+              ✉ hello@menushoot.ai
+            </a>
+            <Link
+              href="/app"
+              className="inline-flex items-center justify-center gap-2 border border-cream/30 text-cream py-4 px-8 rounded font-medium hover:border-cream hover:bg-cream/5 transition-colors"
+            >
+              Try It Now →
+            </Link>
+          </div>
+          <p className="text-cream/40 text-xs mt-8">
+            Based in Miami &amp; Cleveland · Serving restaurants nationwide
+          </p>
         </div>
       </section>
 

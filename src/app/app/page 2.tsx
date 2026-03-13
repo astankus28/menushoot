@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useCallback, useEffect, useRef, Suspense } from "react";
+import { useState, useCallback, useEffect, useRef } from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import {
@@ -118,16 +118,12 @@ function NoCreditsWall() {
 }
 
 // ─── Main ─────────────────────────────────────────────────────────────────────
-function AppPageContent() {
+export default function AppPage() {
   const { user, isLoaded } = useUser();
   const searchParams = useSearchParams();
 
   const credits = useQuery(
     api.users.getCredits,
-    user?.id ? { clerkId: user.id } : "skip"
-  );
-  const pastImages = useQuery(
-    api.images.listByUser,
     user?.id ? { clerkId: user.id } : "skip"
   );
   const getOrCreate = useMutation(api.users.getOrCreate);
@@ -256,9 +252,6 @@ function AppPageContent() {
         <div className="flex items-center gap-5">
           <Link href="/#pricing" className="text-muted text-sm font-medium hover:text-terracotta transition-colors hidden md:block">
             Pricing
-          </Link>
-          <Link href="/account" className="text-muted text-sm font-medium hover:text-terracotta transition-colors hidden md:block">
-            Account
           </Link>
           <SignedOut>
             <SignInButton>
@@ -403,45 +396,10 @@ function AppPageContent() {
                   )}
                 </div>
               )}
-
-              {/* Past transforms gallery */}
-              {pastImages && pastImages.length > 0 && (
-                <section className="mt-16 pt-12 border-t border-brown/10">
-                  <p className="text-terracotta text-xs font-medium tracking-[0.18em] uppercase mb-4">Your Transforms</p>
-                  <p className="text-muted text-sm mb-6">Previously transformed images — click to download</p>
-                  <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
-                    {pastImages.map((img) => {
-                      const styleLabel = styles.find((s) => s.id === img.style)?.label ?? img.style;
-                      return (
-                        <a
-                          key={img._id}
-                          href={img.url}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="group rounded-lg overflow-hidden border border-brown/10 bg-warm-white hover:border-terracotta/40 transition-colors"
-                        >
-                          <div className="aspect-square relative">
-                            <img src={img.url} alt={styleLabel} className="w-full h-full object-cover group-hover:scale-105 transition-transform" />
-                          </div>
-                          <p className="px-3 py-2 text-xs text-muted truncate" title={styleLabel}>{styleLabel}</p>
-                        </a>
-                      );
-                    })}
-                  </div>
-                </section>
-              )}
             </>
           )}
         </SignedIn>
       </main>
     </div>
-  );
-}
-
-export default function AppPage() {
-  return (
-    <Suspense fallback={<div className="min-h-screen bg-cream flex items-center justify-center"><div className="w-9 h-9 border-2 border-terracotta border-t-transparent rounded-full animate-spin" /></div>}>
-      <AppPageContent />
-    </Suspense>
   );
 }
