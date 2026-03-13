@@ -115,10 +115,6 @@ export default function LandingPage() {
         <h2 className="font-serif text-3xl md:text-4xl text-brown leading-tight mb-5">Three steps to a<br />stunning menu</h2>
         <p className="text-muted max-w-md mb-12">No scheduling. No studio time. No travel. Just great food photography delivered to your inbox.</p>
 
-        <div className="mb-20">
-          <StyleSlider />
-        </div>
-
         <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
           <div className="p-8 rounded-lg bg-warm-white border border-brown/10 relative hover:-translate-y-1 hover:shadow-xl transition-all">
             <span className="absolute top-5 right-7 font-serif text-4xl text-terracotta/20 font-bold">01</span>
@@ -138,6 +134,10 @@ export default function LandingPage() {
             <h3 className="font-serif text-lg text-brown mb-3">Receive in 48 hours</h3>
             <p className="text-muted text-sm leading-relaxed">Your images arrive optimized for UberEats, DoorDash, Grubhub, and social. Request revisions at no extra cost.</p>
           </div>
+        </div>
+
+        <div className="mt-20">
+          <StyleSlider />
         </div>
       </section>
 
