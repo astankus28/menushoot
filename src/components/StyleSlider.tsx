@@ -28,9 +28,9 @@ const STYLES: { id: string; label: string; description: string; url: string }[] 
     url: "https://res.cloudinary.com/dnhcs54zz/image/upload/v1773420077/menushoot/transforms/g4a0hn6gkjrcfdxwm44o.png",
   },
   {
-    id: "candlelit",
-    label: "Candlelit",
-    description: "Amber glow, intimate bistro feel",
+    id: "goldenHour",
+    label: "Golden Hour",
+    description: "Late afternoon light, long shadows",
     url: "",
   },
   {

@@ -25,14 +25,15 @@ const MOODY_PROMPT =
   "High-end restaurant or food magazine editorial look. " +
   "Keep the same dish and food - create drama and sophistication. Output a single professional food photograph.";
 
-const CANDLELIT_PROMPT =
-  "Transform this food photo into a warm, candlelit restaurant photograph. Apply: " +
-  "Soft amber and copper toned lighting - candlelit, intimate, evening atmosphere. " +
-  "Warm shadows with gentle golden rim light on the dish. " +
-  "Rich, deep background tones - dark wood, linen, cozy restaurant ambiance. " +
-  "Subtle warmth without oversaturation - refined, not yellow or orange filtered. " +
-  "Italian trattoria, French bistro, or upscale comfort food aesthetic. " +
-  "Keep the same dish and food - make it feel intimate and inviting. Output a single professional food photograph.";
+const GOLDEN_HOUR_PROMPT =
+  "Transform this food photo into a golden hour food photograph. Apply: " +
+  "Late afternoon sun raking across the dish at a low angle - long, soft directional shadows. " +
+  "Warm specular highlights on the food surface without color-casting the food itself yellow or orange. " +
+  "The glow comes from the light direction and shadow quality, not from filtering the entire image warm. " +
+  "Rich, dimensional lighting - bright highlights, deep but not black shadows. " +
+  "The food retains its natural colors; only the lighting feels like golden hour. " +
+  "Think: a beautiful dish photographed at an outdoor restaurant table just before sunset. " +
+  "Keep the same dish and food - add the magic of golden hour light. Output a single professional food photograph.";
 
 const MINIMAL_PROMPT =
   "Transform this food photo into a minimal, Scandinavian-style food photograph. Apply: " +
@@ -81,24 +82,25 @@ const SOCIAL_MEDIA_PROMPT =
 
 const BRIGHT_AIRY_PROMPT =
   "Transform this food photo into a bright, airy lifestyle food photograph. Apply: " +
-  "Overexposed highlights, soft whites, and pastel-adjacent tones. " +
-  "Light, breezy feel - morning light, cafe window, effortless. " +
-  "Soft shadows with almost no dark tones. " +
-  "Fresh, clean, approachable - acai bowl, brunch, smoothie aesthetic. " +
+  "Soft overexposed highlights and clean whites throughout. " +
+  "Light, breezy feel - morning window light, effortless and fresh. " +
+  "Very gentle shadows, almost shadowless - the image feels lifted and open. " +
+  "Pastel-adjacent tones - nothing heavy, dark, or saturated. " +
+  "Fresh, clean, approachable - acai bowl, brunch, smoothie, cafe aesthetic. " +
   "Popular with fast-casual, health-forward, and coffee shop brands. " +
   "Keep the same dish and food - make it feel light and effortlessly beautiful. Output a single professional food photograph.";
 
 export const ART_DIRECTION_STYLES = {
-  editorial:   { id: "editorial",   label: "Editorial",      description: "Clean, high-end menu shot",           prompt: EDITORIAL_PROMPT },
-  natural:     { id: "natural",     label: "Natural",         description: "Bright, fresh, organic",              prompt: NATURAL_PROMPT },
-  moody:       { id: "moody",       label: "Moody",           description: "Dramatic, cinematic shadows",         prompt: MOODY_PROMPT },
-  candlelit:   { id: "candlelit",   label: "Candlelit",       description: "Amber glow, intimate bistro feel",    prompt: CANDLELIT_PROMPT },
-  minimal:     { id: "minimal",     label: "Minimal",         description: "Scandinavian, clean, app-ready",      prompt: MINIMAL_PROMPT },
-  fineDining:  { id: "fineDining",  label: "Fine Dining",     description: "Luxurious, Michelin-level refined",   prompt: FINE_DINING_PROMPT },
-  streetFood:  { id: "streetFood",  label: "Street Food",     description: "Bold, punchy, delivery-optimized",    prompt: STREET_FOOD_PROMPT },
-  rustic:      { id: "rustic",      label: "Rustic",          description: "Earthy, artisan, farm-to-table",      prompt: RUSTIC_PROMPT },
-  socialMedia: { id: "socialMedia", label: "Social Media",    description: "Instagram & TikTok optimized",        prompt: SOCIAL_MEDIA_PROMPT },
-  brightAiry:  { id: "brightAiry",  label: "Bright & Airy",   description: "Light, pastel, café & brunch feel",   prompt: BRIGHT_AIRY_PROMPT },
+  editorial:   { id: "editorial",   label: "Editorial",     description: "Clean, high-end menu shot",          prompt: EDITORIAL_PROMPT },
+  natural:     { id: "natural",     label: "Natural",        description: "Bright, fresh, organic",             prompt: NATURAL_PROMPT },
+  moody:       { id: "moody",       label: "Moody",          description: "Dramatic, cinematic shadows",        prompt: MOODY_PROMPT },
+  goldenHour:  { id: "goldenHour",  label: "Golden Hour",    description: "Late afternoon light, long shadows", prompt: GOLDEN_HOUR_PROMPT },
+  minimal:     { id: "minimal",     label: "Minimal",        description: "Scandinavian, clean, app-ready",     prompt: MINIMAL_PROMPT },
+  fineDining:  { id: "fineDining",  label: "Fine Dining",    description: "Luxurious, Michelin-level refined",  prompt: FINE_DINING_PROMPT },
+  streetFood:  { id: "streetFood",  label: "Street Food",    description: "Bold, punchy, delivery-optimized",   prompt: STREET_FOOD_PROMPT },
+  rustic:      { id: "rustic",      label: "Rustic",         description: "Earthy, artisan, farm-to-table",     prompt: RUSTIC_PROMPT },
+  socialMedia: { id: "socialMedia", label: "Social Media",   description: "Instagram & TikTok optimized",       prompt: SOCIAL_MEDIA_PROMPT },
+  brightAiry:  { id: "brightAiry",  label: "Bright & Airy",  description: "Light, pastel, café & brunch feel",  prompt: BRIGHT_AIRY_PROMPT },
 };
 
 export type StyleId = keyof typeof ART_DIRECTION_STYLES;
