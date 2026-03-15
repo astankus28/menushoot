@@ -31,7 +31,7 @@ const STYLES: { id: string; label: string; description: string; url: string }[] 
     id: "goldenHour",
     label: "Golden Hour",
     description: "Late afternoon light, long shadows",
-    url: "",
+    url: "https://res.cloudinary.com/dnhcs54zz/image/upload/v1773589548/menushoot/transforms/jnyebracaziaewnhq7w1.png",
   },
   {
     id: "minimal",
@@ -69,6 +69,20 @@ const STYLES: { id: string; label: string; description: string; url: string }[] 
     description: "Light, pastel, café & brunch feel",
     url: "https://res.cloudinary.com/dnhcs54zz/image/upload/v1773438438/menushoot/transforms/uza5ayrqkj39ls2qeaki.png",
   },
+  { id: "uberEats",      label: "UberEats",            description: "Click-optimized for UberEats grid",      url: "" },
+  { id: "doorDash",      label: "DoorDash",             description: "Lifestyle-forward delivery hero",        url: "" },
+  { id: "japaneseMin",   label: "Japanese Minimal",     description: "Slate surfaces, negative space, zen",    url: "" },
+  { id: "latinVibrancy", label: "Latin Vibrancy",       description: "Bold, festive, Cuban/Colombian/Peruvian", url: "" },
+  { id: "mediterranean", label: "Mediterranean",        description: "Terracotta, olive, coastal warmth",      url: "" },
+  { id: "bbq",           label: "BBQ & Smokehouse",     description: "Char, cast iron, ember light",           url: "" },
+  { id: "taco",          label: "Taqueria",             description: "Bright, authentic Mexican street energy", url: "" },
+  { id: "happyHour",     label: "Happy Hour",           description: "Warm bar light, social energy",          url: "" },
+  { id: "brunch",        label: "Brunch",               description: "Lazy morning light, weekend energy",     url: "" },
+  { id: "lateNight",     label: "Late Night",           description: "Dark, neon-lit, midnight craveable",     url: "" },
+  { id: "whiteBg",       label: "White Background",     description: "Clean product shot, menu-builder ready", url: "" },
+  { id: "overhead",      label: "Overhead Flat Lay",    description: "Top-down, styled, square-crop perfect",  url: "" },
+  { id: "steamTexture",  label: "Steam & Texture",      description: "Heat, glisten, just-served freshness",   url: "" },
+  { id: "dessert",       label: "Dessert & Pastry",     description: "Parisian patisserie, sugar and gloss",   url: "" },
 ];
 
 // ── Drag slider ───────────────────────────────────────────────────────────────
@@ -176,12 +190,9 @@ export function StyleSlider() {
         <p className="text-terracotta text-xs font-medium tracking-[0.18em] uppercase mb-3">
           See the Difference
         </p>
-        <h3 className="font-serif text-2xl md:text-3xl text-brown mb-2">
-          Six styles. One photo.
-        </h3>
+        <h3 className="font-serif text-2xl md:text-3xl text-brown mb-2">24 styles. One photo.</h3>
         <p className="text-muted text-sm max-w-md">
-          Drag the slider to reveal the transformation. Switch styles to see
-          how AI art direction changes the same dish.
+          Drag the slider to reveal the transformation. Switch styles to see how AI art direction changes the same dish.
         </p>
       </div>
 
