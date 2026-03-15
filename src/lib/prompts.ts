@@ -197,16 +197,23 @@ const LATE_NIGHT_PROMPT =
   "Keep the same dish and food — make it look irresistible at midnight. Output a single professional food photograph.";
 
 const WHITE_BG_PROMPT =
-  "Transform this food photo into a professional studio product photograph on a white background. Apply: " +
-  "Clean white to very light warm grey gradient background — bright white at the top, barely perceptible warmth toward the bottom. " +
-  "A subtle, soft drop shadow beneath the dish — not harsh, just enough to ground it on the surface. " +
-  "A faint, warm surface reflection below the dish — suggesting a polished white or light marble surface. " +
-  "Soft, even studio lighting from slightly above — gentle highlights on top surfaces, no harsh shadows. " +
-  "The dish looks like it's sitting on a real surface in a real studio, not cut out and pasted. " +
-  "Colors accurate and vibrant — nothing washed out by the white surround. " +
-  "No text, logos, watermarks, or props — just the dish, the surface, and the light. " +
-  "Think: high-end product photography for a restaurant app, food brand, or digital menu. " +
-  "Keep the same dish and food — make it a polished, grounded studio product shot. Output a single professional food photograph.";
+  "Transform this food photo into a professional studio product photograph using the following two-step process: " +
+  "STEP 1 — Replace the entire background with a perfectly flat, solid, pure chromakey green (hex #00FF00, RGB 0,255,0). " +
+  "The green must be completely uniform with zero variation, zero gradients, zero shadows. " +
+  "The subject (the dish and plate) must be cleanly isolated with a crisp edge. " +
+  "Do not apply any green to the subject itself. " +
+  "STEP 2 — Now replace the green background with a clean white studio background and relight the scene: " +
+  "Camera angle: 30 degrees above the subject. " +
+  "White background with a subtle warm-to-neutral gradient from top to bottom. " +
+  "A soft, natural drop shadow directly beneath the plate — not hard, not cast sideways. " +
+  "A faint reflection of the plate on a white acrylic surface beneath it. " +
+  "Main light: large octabox at 45 degrees, soft and wrapping. " +
+  "Color temperature: 5500K daylight neutral — white plate must be pure white RGB 255,255,255, no yellow or cream cast. " +
+  "Fill: white V-flat at the front eliminating all forward-facing shadows. " +
+  "The dish must look like it is sitting in a real studio on a real white surface — grounded, dimensional, not floating. " +
+  "Entire dish fully visible with margin on all sides, nothing cropped. " +
+  "No text, logos, or props. " +
+  "Output a single professional studio food photograph.";
 
 const OVERHEAD_PROMPT =
   "Transform this food photo into a perfect overhead flat lay food photograph. Apply: " +

@@ -55,23 +55,9 @@ export async function POST(req: NextRequest) {
 
     const formData = await req.formData();
     const file = formData.get("image") as File | null;
-    const imageUrl = formData.get("imageUrl") as string | null;
-
-    let buffer: Buffer;
-    let mimeType: string;
-
-    if (imageUrl && imageUrl.startsWith("http")) {
-      const res = await fetch(imageUrl);
-      if (!res.ok) throw new Error("Failed to fetch image from URL");
-      const arr = await res.arrayBuffer();
-      buffer = Buffer.from(arr);
-      mimeType = res.headers.get("content-type") || "image/jpeg";
-    } else if (file && file.type.startsWith("image/")) {
-      buffer = Buffer.from(await file.arrayBuffer());
-      mimeType = file.type;
-    } else {
+    if (!file || !file.type.startsWith("image/")) {
       return NextResponse.json(
-        { error: "Please provide a valid image file or imageUrl" },
+        { error: "Please provide a valid image file" },
         { status: 400 }
       );
     }
@@ -80,12 +66,20 @@ export async function POST(req: NextRequest) {
     const style = ART_DIRECTION_STYLES[styleId as StyleId] ?? ART_DIRECTION_STYLES[DEFAULT_STYLE];
     const prompt = style.prompt;
 
+    const buffer = Buffer.from(await file.arrayBuffer());
     const base64 = buffer.toString("base64");
+    const mimeType = file.type;
+    const dataUrl = `data:${mimeType};base64,${base64}`;
+
+    // Nano Banana Pro uses gemini-3.1-flash-image-preview for all styles
+    // (gemini-3-pro-image-preview was deprecated March 9, 2026)
+    // The green screen prompt technique handles quality improvement
+    const geminiModel = "gemini-3.1-flash-image-preview";
 
     const ai = new GoogleGenAI({ apiKey });
 
     const response = await ai.models.generateContent({
-      model: "gemini-3.1-flash-image-preview",
+      model: geminiModel,
       contents: [
         {
           role: "user",
@@ -111,15 +105,15 @@ export async function POST(req: NextRequest) {
       if ("inlineData" in part && part.inlineData?.data) {
         const imgBase64 = part.inlineData.data;
         const imgMime = part.inlineData.mimeType || "image/png";
-        const dataUrl = `data:${imgMime};base64,${imgBase64}`;
+        const geminiDataUrl = `data:${imgMime};base64,${imgBase64}`;
 
         if (initCloudinary()) {
-          const uploaded = await cloudinary.uploader.upload(dataUrl, {
+          const uploaded = await cloudinary.uploader.upload(geminiDataUrl, {
             folder: "menushoot/transforms",
             resource_type: "image",
           });
 
-          // Persist to Convex images table so user has a gallery/history
+          // Save to Convex history
           if (convexUrl && userId) {
             try {
               const { api: convexApi } = await import("../../../../convex/_generated/api");
@@ -131,14 +125,14 @@ export async function POST(req: NextRequest) {
                 style: styleId,
               });
             } catch {
-              // Non-fatal — image still returns successfully
+              // Non-fatal
             }
           }
 
           return NextResponse.json({ image: uploaded.secure_url });
         }
 
-        return NextResponse.json({ image: dataUrl });
+        return NextResponse.json({ image: geminiDataUrl });
       }
     }
 
