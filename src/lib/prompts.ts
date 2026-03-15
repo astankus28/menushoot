@@ -26,14 +26,15 @@ const MOODY_PROMPT =
   "Keep the same dish and food - create drama and sophistication. Output a single professional food photograph.";
 
 const GOLDEN_HOUR_PROMPT =
-  "Transform this food photo into a golden hour food photograph. Apply: " +
-  "Late afternoon sun raking across the dish at a low angle - long, soft directional shadows. " +
-  "Warm specular highlights on the food surface without color-casting the food itself yellow or orange. " +
-  "The glow comes from the light direction and shadow quality, not from filtering the entire image warm. " +
-  "Rich, dimensional lighting - bright highlights, deep but not black shadows. " +
-  "The food retains its natural colors; only the lighting feels like golden hour. " +
-  "Think: a beautiful dish photographed at an outdoor restaurant table just before sunset. " +
-  "Keep the same dish and food - add the magic of golden hour light. Output a single professional food photograph.";
+  "Transform this food photo to look like it was shot during golden hour at an outdoor restaurant table. Apply: " +
+  "Low-angle directional sunlight raking across the scene from the side — not overhead, not diffused. " +
+  "Long, soft cast shadows stretching across the table surface. " +
+  "Warm specular highlights catching on the rim of plates, glassware, and utensils. " +
+  "Background slightly overexposed with warm light bloom and soft bokeh. " +
+  "The food itself retains its natural colors — no yellow or orange filter over the whole image. " +
+  "The warmth lives in the light, shadows, and surface reflections — not in a color grade. " +
+  "Think: a dish photographed at an outdoor cafe table at 6pm in late summer, sunlight coming in from the left at a low angle. " +
+  "Keep the same dish and food — add the magic of golden hour directional light. Output a single professional food photograph.";
 
 const MINIMAL_PROMPT =
   "Transform this food photo into a minimal, Scandinavian-style food photograph. Apply: " +

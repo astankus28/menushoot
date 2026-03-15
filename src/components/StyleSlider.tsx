@@ -49,25 +49,25 @@ const STYLES: { id: string; label: string; description: string; url: string }[] 
     id: "streetFood",
     label: "Street Food",
     description: "Bold, punchy, delivery-optimized",
-    url: "",
+    url: "https://res.cloudinary.com/dnhcs54zz/image/upload/v1773428209/menushoot/transforms/d9mfggbusmi2opmb1bu5.png",
   },
   {
     id: "rustic",
     label: "Rustic",
     description: "Earthy, artisan, farm-to-table",
-    url: "",
+    url: "https://res.cloudinary.com/dnhcs54zz/image/upload/v1773428256/menushoot/transforms/mepkphyyybtbvgt1wvae.png",
   },
   {
     id: "socialMedia",
     label: "Social Media",
     description: "Instagram & TikTok optimized",
-    url: "",
+    url: "https://res.cloudinary.com/dnhcs54zz/image/upload/v1773438353/menushoot/transforms/ww2psxhcqnu5tniqly5x.png",
   },
   {
     id: "brightAiry",
     label: "Bright & Airy",
     description: "Light, pastel, café & brunch feel",
-    url: "",
+    url: "https://res.cloudinary.com/dnhcs54zz/image/upload/v1773438438/menushoot/transforms/uza5ayrqkj39ls2qeaki.png",
   },
 ];
 
