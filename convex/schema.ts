@@ -28,4 +28,11 @@ export default defineSchema({
     style: v.string(),
     createdAt: v.number(),
   }).index("by_user", ["userId"]),
+
+  uploads: defineTable({
+    userId: v.id("users"),
+    publicId: v.string(),
+    url: v.string(),
+    createdAt: v.number(),
+  }).index("by_user", ["userId"]),
 });

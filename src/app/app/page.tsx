@@ -130,9 +130,14 @@ function AppPageContent() {
     api.images.listByUser,
     user?.id ? { clerkId: user.id } : "skip"
   );
+  const myUploads = useQuery(
+    api.uploads.listByUser,
+    user?.id ? { clerkId: user.id } : "skip"
+  );
   const getOrCreate = useMutation(api.users.getOrCreate);
 
   const [file, setFile] = useState<File | null>(null);
+  const [selectedUploadUrl, setSelectedUploadUrl] = useState<string | null>(null);
   const [preview, setPreview] = useState<string | null>(null);
   const [result, setResult] = useState<string | null>(null);
   const [style, setStyle] = useState<string>("editorial");
@@ -172,17 +177,31 @@ function AppPageContent() {
         return;
       }
       setFile(f);
+      setSelectedUploadUrl(null);
       setResult(null);
       if (f) {
         const reader = new FileReader();
         reader.onload = () => setPreview(reader.result as string);
         reader.readAsDataURL(f);
+        // Save to My Uploads for later
+        if (user) {
+          const formData = new FormData();
+          formData.append("image", f);
+          fetch("/api/upload", { method: "POST", body: formData }).catch(() => {});
+        }
       } else {
         setPreview(null);
       }
     },
     [user, credits]
   );
+
+  const handleSelectUpload = useCallback((url: string) => {
+    setFile(null);
+    setSelectedUploadUrl(url);
+    setPreview(url);
+    setResult(null);
+  }, []);
 
   const handleDrop = useCallback(
     (e: React.DragEvent) => {
@@ -206,7 +225,8 @@ function AppPageContent() {
   );
 
   const handleTransform = async () => {
-    if (!file) { setToast({ message: "Please upload a photo first.", type: "error" }); return; }
+    const hasImage = file || selectedUploadUrl;
+    if (!hasImage) { setToast({ message: "Please upload a photo or pick one from My Uploads.", type: "error" }); return; }
     if (!user) { setToast({ message: "Please sign in to transform images.", type: "error" }); return; }
     if (credits !== undefined && credits < 1) {
       setToast({ message: "No credits remaining. Purchase a plan to continue.", type: "info" });
@@ -215,7 +235,8 @@ function AppPageContent() {
     setIsLoading(true);
     try {
       const formData = new FormData();
-      formData.append("image", file);
+      if (file) formData.append("image", file);
+      else if (selectedUploadUrl) formData.append("imageUrl", selectedUploadUrl);
       formData.append("style", style);
       const res = await fetch("/api/transform", { method: "POST", body: formData });
       const data = await res.json();
@@ -237,11 +258,12 @@ function AppPageContent() {
     a.click();
   };
 
-  const handleReset = () => { setFile(null); setPreview(null); setResult(null); };
+  const handleReset = () => { setFile(null); setSelectedUploadUrl(null); setPreview(null); setResult(null); };
 
   const styles = Object.values(ART_DIRECTION_STYLES);
   const isSignedIn = isLoaded && !!user;
-  const transformDisabled = isLoading || !file || !isSignedIn || (credits !== undefined && credits < 1);
+  const hasImage = file || selectedUploadUrl;
+  const transformDisabled = isLoading || !hasImage || !isSignedIn || (credits !== undefined && credits < 1);
   const transformLabel = isLoading ? "Transforming…" : !isSignedIn ? "Sign in to Transform" : credits !== undefined && credits < 1 ? "No Credits — Buy to Continue" : "Transform";
 
   return (
@@ -313,6 +335,28 @@ function AppPageContent() {
                   </p>
                 )}
               </div>
+
+              {/* My Uploads */}
+              {myUploads && myUploads.length > 0 && (
+                <section className="mb-8">
+                  <p className="text-terracotta text-xs font-medium tracking-[0.18em] uppercase mb-3">My Uploads</p>
+                  <p className="text-muted text-sm mb-4">Pick a saved photo to transform, or upload a new one below</p>
+                  <div className="flex gap-3 overflow-x-auto pb-2 -mx-1 scrollbar-thin">
+                    {myUploads.map((upload) => (
+                      <button
+                        key={upload._id}
+                        type="button"
+                        onClick={() => handleSelectUpload(upload.url)}
+                        className={`shrink-0 w-24 h-24 rounded-lg overflow-hidden border-2 transition-all hover:border-terracotta/60 ${
+                          selectedUploadUrl === upload.url ? "border-terracotta ring-2 ring-terracotta/30" : "border-brown/10"
+                        }`}
+                      >
+                        <img src={upload.url} alt="Upload" className="w-full h-full object-cover" />
+                      </button>
+                    ))}
+                  </div>
+                </section>
+              )}
 
               {!preview ? (
                 <div

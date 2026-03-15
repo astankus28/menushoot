@@ -55,9 +55,23 @@ export async function POST(req: NextRequest) {
 
     const formData = await req.formData();
     const file = formData.get("image") as File | null;
-    if (!file || !file.type.startsWith("image/")) {
+    const imageUrl = formData.get("imageUrl") as string | null;
+
+    let buffer: Buffer;
+    let mimeType: string;
+
+    if (imageUrl && imageUrl.startsWith("http")) {
+      const res = await fetch(imageUrl);
+      if (!res.ok) throw new Error("Failed to fetch image from URL");
+      const arr = await res.arrayBuffer();
+      buffer = Buffer.from(arr);
+      mimeType = res.headers.get("content-type") || "image/jpeg";
+    } else if (file && file.type.startsWith("image/")) {
+      buffer = Buffer.from(await file.arrayBuffer());
+      mimeType = file.type;
+    } else {
       return NextResponse.json(
-        { error: "Please provide a valid image file" },
+        { error: "Please provide a valid image file or imageUrl" },
         { status: 400 }
       );
     }
@@ -66,9 +80,7 @@ export async function POST(req: NextRequest) {
     const style = ART_DIRECTION_STYLES[styleId as StyleId] ?? ART_DIRECTION_STYLES[DEFAULT_STYLE];
     const prompt = style.prompt;
 
-    const buffer = Buffer.from(await file.arrayBuffer());
     const base64 = buffer.toString("base64");
-    const mimeType = file.type;
 
     const ai = new GoogleGenAI({ apiKey });
 

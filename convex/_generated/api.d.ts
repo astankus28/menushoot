@@ -9,6 +9,7 @@
  */
 
 import type * as images from "../images.js";
+import type * as uploads from "../uploads.js";
 import type * as users from "../users.js";
 
 import type {
@@ -19,6 +20,7 @@ import type {
 
 declare const fullApi: ApiFromModules<{
   images: typeof images;
+  uploads: typeof uploads;
   users: typeof users;
 }>;
 
