@@ -2,47 +2,12 @@ import Link from "next/link";
 import Image from "next/image";
 import { BuyButton } from "@/components/BuyButton";
 import { StyleSlider } from "@/components/StyleSlider";
+import { Nav } from "@/components/Nav";
 
 export default function LandingPage() {
   return (
     <div className="min-h-screen bg-cream text-charcoal">
-      <nav className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-6 md:px-12 py-5 bg-cream/90 backdrop-blur-sm border-b border-brown/10">
-        <Link href="/" className="font-serif text-xl text-brown tracking-tight">
-          Menu<span className="text-terracotta italic">Shoot</span>.ai
-        </Link>
-        <ul className="hidden md:flex items-center gap-8 list-none">
-          <li>
-            <Link href="#how" className="text-muted text-sm font-medium tracking-wide hover:text-terracotta transition-colors">
-              How It Works
-            </Link>
-          </li>
-          <li>
-            <Link href="#portfolio" className="text-muted text-sm font-medium tracking-wide hover:text-terracotta transition-colors">
-              Portfolio
-            </Link>
-          </li>
-          <li>
-            <Link href="#pricing" className="text-muted text-sm font-medium tracking-wide hover:text-terracotta transition-colors">
-              Pricing
-            </Link>
-          </li>
-          <li>
-            <Link href="#contact" className="text-muted text-sm font-medium tracking-wide hover:text-terracotta transition-colors">
-              Contact
-            </Link>
-          </li>
-          <li>
-            <Link href="/account" className="text-muted text-sm font-medium tracking-wide hover:text-terracotta transition-colors">
-              Account
-            </Link>
-          </li>
-          <li>
-            <Link href="/account" className="bg-terracotta text-white py-2.5 px-5 rounded text-sm font-medium hover:bg-brown transition-colors">
-              Get Started
-            </Link>
-          </li>
-        </ul>
-      </nav>
+      <Nav />
 
       <section className="min-h-screen grid grid-cols-1 lg:grid-cols-2 pt-20 overflow-hidden">
         <div className="flex flex-col justify-center px-8 md:px-16 lg:px-20 py-16 lg:py-20">
@@ -56,7 +21,7 @@ export default function LandingPage() {
             Send us your existing photos — even iPhone snaps. We deliver polished, professional menu imagery in 48 hours. No studio, no scheduling, no hassle.
           </p>
           <div className="flex flex-wrap gap-4">
-            <Link href="/account" className="inline-block bg-terracotta text-white py-4 px-8 rounded font-medium hover:bg-brown transition-all hover:-translate-y-0.5 hover:shadow-lg">
+            <Link href="/app" className="inline-block bg-terracotta text-white py-4 px-8 rounded font-medium hover:bg-brown transition-all hover:-translate-y-0.5 hover:shadow-lg">
               Try It Now
             </Link>
             <Link href="#how" className="inline-flex items-center gap-2 text-brown font-medium hover:gap-3 transition-all">
@@ -113,8 +78,7 @@ export default function LandingPage() {
       <section id="how" className="py-24 md:py-28 px-6 md:px-20 scroll-mt-24">
         <p className="text-terracotta text-xs font-medium tracking-[0.18em] uppercase mb-4">The Process</p>
         <h2 className="font-serif text-3xl md:text-4xl text-brown leading-tight mb-5">Three steps to a<br />stunning menu</h2>
-        <p className="text-muted max-w-md mb-12">No scheduling. No studio time. No travel. Just great food photography delivered to your inbox.</p>
-
+        <p className="text-muted max-w-md mb-16">No scheduling. No studio time. No travel. Just great food photography delivered to your inbox.</p>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
           <div className="p-8 rounded-lg bg-warm-white border border-brown/10 relative hover:-translate-y-1 hover:shadow-xl transition-all">
             <span className="absolute top-5 right-7 font-serif text-4xl text-terracotta/20 font-bold">01</span>
@@ -136,9 +100,8 @@ export default function LandingPage() {
           </div>
         </div>
 
-        <div className="mt-20">
-          <StyleSlider />
-        </div>
+        {/* Before/After style slider */}
+        <StyleSlider />
       </section>
 
       <section id="portfolio" className="py-24 md:py-28 px-6 md:px-20 bg-warm-white scroll-mt-24">
@@ -167,12 +130,12 @@ export default function LandingPage() {
         </div>
       </section>
 
-      <section id="pricing" className="py-24 md:py-28 px-6 md:px-20 scroll-mt-24 text-center">
+      <section id="pricing" className="py-24 md:py-28 px-6 md:px-20 scroll-mt-24">
         <p className="text-terracotta text-xs font-medium tracking-[0.18em] uppercase mb-4">Pricing</p>
         <h2 className="font-serif text-3xl md:text-4xl text-brown leading-tight mb-5">Simple, transparent<br />packages</h2>
-        <p className="text-muted max-w-md mx-auto mb-14">No hidden fees. Pay per dish or choose a monthly plan.</p>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-4xl mx-auto">
-          <div className="p-8 rounded-lg border border-brown/10 bg-warm-white text-left">
+        <p className="text-muted max-w-md mb-14">No hidden fees. Pay per dish or choose a monthly plan.</p>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-4xl">
+          <div className="p-8 rounded-lg border border-brown/10 bg-warm-white">
             <p className="text-xs tracking-[0.14em] uppercase text-terracotta font-medium mb-4">Trial</p>
             <div className="font-serif text-3xl text-brown">$99</div>
             <p className="text-muted text-sm mt-2 mb-6">3 dish images</p>
@@ -183,7 +146,7 @@ export default function LandingPage() {
             </ul>
             <BuyButton productId="trial" variant="outline" />
           </div>
-          <div className="p-8 rounded-lg border-2 border-terracotta bg-brown text-cream relative text-left">
+          <div className="p-8 rounded-lg border-2 border-terracotta bg-brown text-cream relative">
             <span className="absolute -top-3 left-1/2 -translate-x-1/2 bg-terracotta text-white text-[10px] tracking-wider uppercase px-4 py-1 rounded-full">Most Popular</span>
             <p className="text-xs tracking-[0.14em] uppercase text-gold-light font-medium mb-4 mt-2">Full Menu</p>
             <div className="font-serif text-3xl text-cream">$549</div>
@@ -195,7 +158,7 @@ export default function LandingPage() {
             </ul>
             <BuyButton productId="full" variant="filled" />
           </div>
-          <div className="p-8 rounded-lg border border-brown/10 bg-warm-white text-left">
+          <div className="p-8 rounded-lg border border-brown/10 bg-warm-white">
             <p className="text-xs tracking-[0.14em] uppercase text-terracotta font-medium mb-4">Agency Pro</p>
             <div className="font-serif text-3xl text-brown">$999<span className="text-base font-sans font-light">/mo</span></div>
             <p className="text-muted text-sm mt-2 mb-6">75 images/month</p>
@@ -227,7 +190,7 @@ export default function LandingPage() {
               ✉ hello@menushoot.ai
             </a>
             <Link
-              href="/account"
+              href="/app"
               className="inline-flex items-center justify-center gap-2 border border-cream/30 text-cream py-4 px-8 rounded font-medium hover:border-cream hover:bg-cream/5 transition-colors"
             >
               Try It Now →
