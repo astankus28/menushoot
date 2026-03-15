@@ -94,24 +94,27 @@ const BRIGHT_AIRY_PROMPT =
 // ── NEW STYLES ────────────────────────────────────────────────────────────────
 
 const UBEREATS_PROMPT =
-  "Transform this food photo into a perfectly optimized UberEats listing photograph. Apply: " +
-  "High contrast with rich, saturated colors that pop at thumbnail size (around 400x300px). " +
-  "Bright, even lighting — no dark shadows that muddy detail at small sizes. " +
-  "The dish fills the frame confidently — centered, nothing cut off. " +
-  "Clean, uncluttered background — no distracting props or surfaces. " +
-  "Colors are true-to-life but punched up 15-20% — looks appetizing, not artificial. " +
-  "Optimized for the UberEats grid — square-friendly, eye-catching at a glance. " +
-  "Keep the same dish and food — make it the most click-worthy version of itself. Output a single professional food photograph.";
+  "Transform this food photo into an Uber Eats approved menu photograph. Apply: " +
+  "Landscape orientation optimized for 5:4 ratio (1200x800px) — the dish centered with breathing room on all sides. " +
+  "Natural, soft lighting — window light feel, no harsh shadows, no dark areas that obscure the food. " +
+  "Top-down angle for flat dishes and bowls; 45-degree angle for burgers, sandwiches, and tall items. " +
+  "The dish takes up approximately three-quarters of the frame — prominent but not cropped. " +
+  "Clean, neutral background — simple surface, no busy props or distracting elements. " +
+  "Colors natural and appetizing — true to the actual dish, not over-saturated or filtered. " +
+  "No text, logos, watermarks, or graphic overlays — clean photo only. " +
+  "Single dish only — one menu item clearly visible and identifiable. " +
+  "Keep the same dish and food — make it the most appetizing, platform-approved version. Output a single professional food photograph.";
 
 const DOORDASH_PROMPT =
-  "Transform this food photo into a perfectly optimized DoorDash listing photograph. Apply: " +
-  "Lifestyle-forward, slightly warmer tone than a clinical product shot. " +
-  "Hero-style composition — the dish is the star, shot from a slight angle (not straight overhead). " +
-  "Generous depth of field — background softly blurred to isolate the dish. " +
-  "Warm, inviting tones that suggest comfort and satisfaction. " +
-  "Bold enough to stop a scroll, refined enough to feel trustworthy. " +
-  "Optimized for DoorDash's card layout — works at both thumbnail and expanded size. " +
-  "Keep the same dish and food — make it irresistible on the DoorDash grid. Output a single professional food photograph.";
+  "Transform this food photo into a DoorDash-approved menu photograph. Apply: " +
+  "Clean, neutral background — no busy surfaces, props, or distracting elements. " +
+  "The dish centered and fully visible in the frame — nothing cropped or cut off. " +
+  "Square-friendly composition optimized for 1:1 aspect ratio thumbnail display. " +
+  "Bright, even, natural-looking lighting — no harsh shadows, no unnatural color casts. " +
+  "Colors accurate and appetizing — true to the actual dish, punched up slightly for appetite appeal. " +
+  "No text, logos, overlays, or graphic elements — clean photo only. " +
+  "High detail and sharpness throughout — looks great at both thumbnail (200px) and full size. " +
+  "Keep the same dish and food — make it the clearest, most appetizing version of itself. Output a single professional food photograph.";
 
 const JAPANESE_MINIMAL_PROMPT =
   "Transform this food photo into a Japanese minimalist food photograph. Apply: " +
@@ -194,14 +197,16 @@ const LATE_NIGHT_PROMPT =
   "Keep the same dish and food — make it look irresistible at midnight. Output a single professional food photograph.";
 
 const WHITE_BG_PROMPT =
-  "Transform this food photo into a clean white background product photograph. Apply: " +
-  "Pure white or near-white seamless background — no texture, no props, no surface detail. " +
-  "Soft, even studio lighting — no harsh shadows, gentle fill light on all sides. " +
-  "The dish perfectly centered, floating cleanly on the white background. " +
-  "Colors are accurate and vibrant against the white — nothing washed out. " +
-  "E-commerce and menu-builder ready — works for digital menus, apps, and online ordering platforms. " +
-  "Clean enough to be cut out or used on any background color. " +
-  "Keep the same dish and food — make it a perfect product shot. Output a single professional food photograph.";
+  "Transform this food photo into a professional studio product photograph on a white background. Apply: " +
+  "Clean white to very light warm grey gradient background — bright white at the top, barely perceptible warmth toward the bottom. " +
+  "A subtle, soft drop shadow beneath the dish — not harsh, just enough to ground it on the surface. " +
+  "A faint, warm surface reflection below the dish — suggesting a polished white or light marble surface. " +
+  "Soft, even studio lighting from slightly above — gentle highlights on top surfaces, no harsh shadows. " +
+  "The dish looks like it's sitting on a real surface in a real studio, not cut out and pasted. " +
+  "Colors accurate and vibrant — nothing washed out by the white surround. " +
+  "No text, logos, watermarks, or props — just the dish, the surface, and the light. " +
+  "Think: high-end product photography for a restaurant app, food brand, or digital menu. " +
+  "Keep the same dish and food — make it a polished, grounded studio product shot. Output a single professional food photograph.";
 
 const OVERHEAD_PROMPT =
   "Transform this food photo into a perfect overhead flat lay food photograph. Apply: " +
