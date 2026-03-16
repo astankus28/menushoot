@@ -17,12 +17,15 @@ export default function LandingPage() {
             <em className="text-terracotta italic">beautifully shot.</em>
             <br />Without a shoot.
           </h1>
-          <p className="text-muted text-lg leading-relaxed max-w-md mb-10">
+          <p className="text-muted text-lg leading-relaxed max-w-md mb-6">
             Send us your existing photos — even iPhone snaps. We deliver polished, professional menu imagery in 48 hours. No studio, no scheduling, no hassle.
+          </p>
+          <p className="text-sage text-sm font-medium mb-8 flex items-center gap-2">
+            <span className="text-base">🎁</span> Sign up free · Get 1 complimentary transformation · No credit card required
           </p>
           <div className="flex flex-wrap gap-4">
             <Link href="/app" className="inline-block bg-terracotta text-white py-4 px-8 rounded font-medium hover:bg-brown transition-all hover:-translate-y-0.5 hover:shadow-lg">
-              Try It Now
+              Try It Free →
             </Link>
             <Link href="#how" className="inline-flex items-center gap-2 text-brown font-medium hover:gap-3 transition-all">
               See how it works
@@ -133,8 +136,24 @@ export default function LandingPage() {
       <section id="pricing" className="py-24 md:py-28 px-6 md:px-20 scroll-mt-24">
         <p className="text-terracotta text-xs font-medium tracking-[0.18em] uppercase mb-4">Pricing</p>
         <h2 className="font-serif text-3xl md:text-4xl text-brown leading-tight mb-5">Simple, transparent<br />packages</h2>
-        <p className="text-muted max-w-md mb-14">No hidden fees. Pay per dish or choose a monthly plan.</p>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-4xl">
+        <p className="text-muted max-w-md mb-14">No hidden fees. Start free, pay only when you're ready to scale.</p>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-6xl">
+          {/* Free tier */}
+          <div className="p-8 rounded-lg border-2 border-sage bg-warm-white relative">
+            <span className="absolute -top-3 left-1/2 -translate-x-1/2 bg-sage text-white text-[10px] tracking-wider uppercase px-4 py-1 rounded-full">Start Here</span>
+            <p className="text-xs tracking-[0.14em] uppercase text-sage font-medium mb-4 mt-2">Free</p>
+            <div className="font-serif text-3xl text-brown">$0</div>
+            <p className="text-muted text-sm mt-2 mb-6">1 dish image</p>
+            <ul className="space-y-3 text-sm text-muted mb-8">
+              <li className="flex items-center gap-2"><span className="text-sage">✓</span> 1 free transformation</li>
+              <li className="flex items-center gap-2"><span className="text-sage">✓</span> All 24 styles</li>
+              <li className="flex items-center gap-2"><span className="text-sage">✓</span> Phone verification required</li>
+            </ul>
+            <Link href="/app" className="block w-full text-center py-3 px-6 rounded border-2 border-sage text-sage font-medium hover:bg-sage hover:text-white transition-colors">
+              Get Started Free
+            </Link>
+          </div>
+          {/* Trial */}
           <div className="p-8 rounded-lg border border-brown/10 bg-warm-white">
             <p className="text-xs tracking-[0.14em] uppercase text-terracotta font-medium mb-4">Trial</p>
             <div className="font-serif text-3xl text-brown">$99</div>
@@ -146,6 +165,7 @@ export default function LandingPage() {
             </ul>
             <BuyButton productId="trial" variant="outline" />
           </div>
+          {/* Full Menu */}
           <div className="p-8 rounded-lg border-2 border-terracotta bg-brown text-cream relative">
             <span className="absolute -top-3 left-1/2 -translate-x-1/2 bg-terracotta text-white text-[10px] tracking-wider uppercase px-4 py-1 rounded-full">Most Popular</span>
             <p className="text-xs tracking-[0.14em] uppercase text-gold-light font-medium mb-4 mt-2">Full Menu</p>
@@ -158,6 +178,7 @@ export default function LandingPage() {
             </ul>
             <BuyButton productId="full" variant="filled" />
           </div>
+          {/* Agency Pro */}
           <div className="p-8 rounded-lg border border-brown/10 bg-warm-white">
             <p className="text-xs tracking-[0.14em] uppercase text-terracotta font-medium mb-4">Agency Pro</p>
             <div className="font-serif text-3xl text-brown">$999<span className="text-base font-sans font-light">/mo</span></div>

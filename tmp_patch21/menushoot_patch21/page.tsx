@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useCallback, useEffect, useRef, Suspense } from "react";
+import { useState, useCallback, useEffect, useRef } from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import {
@@ -56,12 +56,12 @@ function AuthWall() {
     <div className="flex flex-col items-center justify-center py-20 px-6 text-center">
       <span className="text-5xl mb-6">📸</span>
       <h2 className="font-serif text-2xl text-brown mb-3">
-        Get your first transformation free
+        Sign in to transform your photos
       </h2>
-      <p className="text-muted text-sm max-w-sm mb-2">
-        Create a free account with your phone number and we'll give you 1 complimentary transformation — no credit card required.
+      <p className="text-muted text-sm max-w-sm mb-8">
+        Create a free account to get started. Purchase credits and start
+        receiving professional food photography in seconds.
       </p>
-      <p className="text-sage text-xs font-medium mb-8">🎁 1 free image · All 24 styles · Instant delivery</p>
       <div className="flex flex-wrap gap-4 justify-center">
         <SignUpButton>
           <button className="bg-terracotta text-white py-3 px-8 rounded font-medium hover:bg-brown transition-colors">
@@ -118,7 +118,7 @@ function NoCreditsWall() {
 }
 
 // ─── Main ─────────────────────────────────────────────────────────────────────
-function AppPageContent() {
+export default function AppPage() {
   const { user, isLoaded } = useUser();
   const searchParams = useSearchParams();
 
@@ -126,16 +126,10 @@ function AppPageContent() {
     api.users.getCredits,
     user?.id ? { clerkId: user.id } : "skip"
   );
-  const uploads = useQuery(
-    api.uploads.listByUser,
-    user?.id ? { clerkId: user.id } : "skip"
-  );
   const getOrCreate = useMutation(api.users.getOrCreate);
 
   const [file, setFile] = useState<File | null>(null);
-  const [selectedImageUrl, setSelectedImageUrl] = useState<string | null>(null);
   const [preview, setPreview] = useState<string | null>(null);
-  const [isUploading, setIsUploading] = useState(false);
   const [result, setResult] = useState<string | null>(null);
   const [style, setStyle] = useState<string>("editorial");
   const [isDragging, setIsDragging] = useState(false);
@@ -169,47 +163,19 @@ function AppPageContent() {
   }, [searchParams]);
 
   const handleFile = useCallback(
-    async (f: File | null) => {
+    (f: File | null) => {
       if (f && user && credits !== undefined && credits < 1) {
         setToast({ message: "You need credits to transform images.", type: "info" });
         return;
       }
+      setFile(f);
       setResult(null);
-      if (!f) {
-        setFile(null);
-        setSelectedImageUrl(null);
-        setPreview(null);
-        return;
-      }
-      if (user) {
-        setIsUploading(true);
-        try {
-          const formData = new FormData();
-          formData.append("image", f);
-          const res = await fetch("/api/upload", { method: "POST", body: formData });
-          const data = await res.json();
-          if (!res.ok) throw new Error(data.error || "Upload failed");
-          if (data.url) {
-            setSelectedImageUrl(data.url);
-            setPreview(data.url);
-            setFile(null);
-          } else throw new Error("No URL returned");
-        } catch (err) {
-          setToast({ message: err instanceof Error ? err.message : "Upload failed", type: "error" });
-          const reader = new FileReader();
-          reader.onload = () => setPreview(reader.result as string);
-          reader.readAsDataURL(f);
-          setFile(f);
-          setSelectedImageUrl(null);
-        } finally {
-          setIsUploading(false);
-        }
-      } else {
+      if (f) {
         const reader = new FileReader();
         reader.onload = () => setPreview(reader.result as string);
         reader.readAsDataURL(f);
-        setFile(f);
-        setSelectedImageUrl(null);
+      } else {
+        setPreview(null);
       }
     },
     [user, credits]
@@ -220,7 +186,7 @@ function AppPageContent() {
       e.preventDefault();
       setIsDragging(false);
       const f = e.dataTransfer.files[0];
-      if (f && f.type.startsWith("image/")) void handleFile(f);
+      if (f && f.type.startsWith("image/")) handleFile(f);
       else setToast({ message: "Please upload an image file (JPEG, PNG, etc.)", type: "error" });
     },
     [handleFile]
@@ -230,22 +196,14 @@ function AppPageContent() {
   const handleInputChange = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
       const f = e.target.files?.[0];
-      if (f) void handleFile(f);
+      if (f) handleFile(f);
       e.target.value = "";
     },
     [handleFile]
   );
 
-  const handleSelectUpload = useCallback((url: string) => {
-    setFile(null);
-    setSelectedImageUrl(url);
-    setPreview(url);
-    setResult(null);
-  }, []);
-
   const handleTransform = async () => {
-    const hasImage = file || selectedImageUrl;
-    if (!hasImage) { setToast({ message: "Please upload a photo first.", type: "error" }); return; }
+    if (!file) { setToast({ message: "Please upload a photo first.", type: "error" }); return; }
     if (!user) { setToast({ message: "Please sign in to transform images.", type: "error" }); return; }
     if (credits !== undefined && credits < 1) {
       setToast({ message: "No credits remaining. Purchase a plan to continue.", type: "info" });
@@ -254,8 +212,7 @@ function AppPageContent() {
     setIsLoading(true);
     try {
       const formData = new FormData();
-      if (selectedImageUrl) formData.append("imageUrl", selectedImageUrl);
-      else if (file) formData.append("image", file);
+      formData.append("image", file);
       formData.append("style", style);
       const res = await fetch("/api/transform", { method: "POST", body: formData });
       const data = await res.json();
@@ -277,12 +234,11 @@ function AppPageContent() {
     a.click();
   };
 
-  const handleReset = () => { setFile(null); setSelectedImageUrl(null); setPreview(null); setResult(null); };
+  const handleReset = () => { setFile(null); setPreview(null); setResult(null); };
 
   const styles = Object.values(ART_DIRECTION_STYLES);
   const isSignedIn = isLoaded && !!user;
-  const hasImage = !!preview;
-  const transformDisabled = isLoading || !hasImage || !isSignedIn || (credits !== undefined && credits < 1);
+  const transformDisabled = isLoading || !file || !isSignedIn || (credits !== undefined && credits < 1);
   const transformLabel = isLoading ? "Transforming…" : !isSignedIn ? "Sign in to Transform" : credits !== undefined && credits < 1 ? "No Credits — Buy to Continue" : "Transform";
 
   return (
@@ -309,9 +265,6 @@ function AppPageContent() {
             </SignUpButton>
           </SignedOut>
           <SignedIn>
-            <Link href="/account" className="text-terracotta text-sm font-medium hover:underline hidden md:block">
-              Account
-            </Link>
             <span className="text-muted text-sm tabular-nums">
               {credits ?? 0} credit{credits !== 1 ? "s" : ""}
             </span>
@@ -355,27 +308,6 @@ function AppPageContent() {
                 )}
               </div>
 
-              {/* My Uploads */}
-              {uploads && uploads.length > 0 && (
-                <div className="mb-6">
-                  <p className="text-xs tracking-[0.12em] uppercase text-muted font-medium mb-3">My Uploads</p>
-                  <div className="flex gap-3 overflow-x-auto pb-2 -mx-1 scrollbar-thin">
-                    {uploads.map((u) => (
-                      <button
-                        key={u._id}
-                        type="button"
-                        onClick={() => handleSelectUpload(u.url)}
-                        className={`flex-shrink-0 w-20 h-20 rounded-lg overflow-hidden border-2 transition-all hover:border-terracotta/60 ${
-                          selectedImageUrl === u.url ? "border-terracotta ring-2 ring-terracotta/30" : "border-brown/10"
-                        }`}
-                      >
-                        <img src={u.url} alt="Upload" className="w-full h-full object-cover" />
-                      </button>
-                    ))}
-                  </div>
-                </div>
-              )}
-
               {!preview ? (
                 <div
                   onDrop={handleDrop}
@@ -383,22 +315,13 @@ function AppPageContent() {
                   onDragLeave={handleDragLeave}
                   className={`border-2 border-dashed rounded-lg p-12 md:p-16 text-center transition-colors cursor-pointer ${
                     isDragging ? "border-terracotta bg-terracotta/5" : "border-muted/40 hover:border-muted hover:bg-warm-white/50"
-                  } ${isUploading ? "opacity-60 pointer-events-none" : ""}`}
+                  }`}
                 >
-                  <input type="file" accept="image/*" onChange={handleInputChange} className="hidden" id="upload" disabled={isUploading} />
+                  <input type="file" accept="image/*" onChange={handleInputChange} className="hidden" id="upload" />
                   <label htmlFor="upload" className="cursor-pointer block">
-                    {isUploading ? (
-                      <>
-                        <div className="w-9 h-9 border-2 border-terracotta border-t-transparent rounded-full animate-spin mx-auto mb-3" />
-                        <p className="font-serif text-lg text-brown mb-1">Saving to My Uploads…</p>
-                      </>
-                    ) : (
-                      <>
-                        <span className="text-4xl mb-3 block">📸</span>
-                        <p className="font-serif text-lg text-brown mb-1">Drag & drop your food photo</p>
-                        <p className="text-muted text-sm">or click to browse · iPhone photos welcome</p>
-                      </>
-                    )}
+                    <span className="text-4xl mb-3 block">📸</span>
+                    <p className="font-serif text-lg text-brown mb-1">Drag & drop your food photo</p>
+                    <p className="text-muted text-sm">or click to browse · iPhone photos welcome</p>
                   </label>
                 </div>
               ) : (
@@ -479,13 +402,5 @@ function AppPageContent() {
         </SignedIn>
       </main>
     </div>
-  );
-}
-
-export default function AppPage() {
-  return (
-    <Suspense fallback={<div className="min-h-screen bg-cream flex items-center justify-center"><div className="w-9 h-9 border-2 border-terracotta border-t-transparent rounded-full animate-spin" /></div>}>
-      <AppPageContent />
-    </Suspense>
   );
 }

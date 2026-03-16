@@ -48,22 +48,6 @@ export const getCredits = query({
   },
 });
 
-export const listOrders = query({
-  args: { clerkId: v.string() },
-  handler: async (ctx, args) => {
-    const user = await ctx.db
-      .query("users")
-      .withIndex("by_clerk_id", (q) => q.eq("clerkId", args.clerkId))
-      .first();
-    if (!user) return [];
-    return await ctx.db
-      .query("orders")
-      .withIndex("by_user", (q) => q.eq("userId", user._id))
-      .order("desc")
-      .take(50);
-  },
-});
-
 export const addCredits = mutation({
   args: {
     clerkId: v.string(),
