@@ -210,7 +210,11 @@ export default function AccountPage() {
             <h2 className="text-terracotta text-xs font-medium tracking-[0.18em] uppercase mb-3">
               Your Transforms
             </h2>
-            {pastImages && pastImages.length > 0 ? (
+            {pastImages === undefined ? (
+              <p className="text-muted text-sm py-6 px-4 rounded-lg border border-brown/10 bg-warm-white">
+                Loading your transforms…
+              </p>
+            ) : pastImages.length > 0 ? (
               <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
                 {pastImages.map((img) => {
                   const styleLabel = styles.find((s) => s.id === img.style)?.label ?? img.style;

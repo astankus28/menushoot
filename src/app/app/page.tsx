@@ -130,6 +130,10 @@ function AppPageContent() {
     api.uploads.listByUser,
     user?.id ? { clerkId: user.id } : "skip"
   );
+  const pastImages = useQuery(
+    api.images.listByUser,
+    user?.id ? { clerkId: user.id } : "skip"
+  );
   const getOrCreate = useMutation(api.users.getOrCreate);
 
   const [file, setFile] = useState<File | null>(null);
@@ -372,6 +376,29 @@ function AppPageContent() {
                         <img src={u.url} alt="Upload" className="w-full h-full object-cover" />
                       </button>
                     ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Recent Transforms */}
+              {pastImages && pastImages.length > 0 && (
+                <div className="mb-6">
+                  <p className="text-xs tracking-[0.12em] uppercase text-muted font-medium mb-3">Recent Transforms</p>
+                  <div className="flex gap-3 overflow-x-auto pb-2 -mx-1 scrollbar-thin">
+                    {pastImages.map((img) => {
+                      const styleLabel = styles.find((s) => s.id === img.style)?.label ?? img.style;
+                      return (
+                        <a
+                          key={img._id}
+                          href={img.url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="flex-shrink-0 w-20 h-20 rounded-lg overflow-hidden border-2 border-brown/10 hover:border-terracotta/60 transition-all group"
+                        >
+                          <img src={img.url} alt={styleLabel} className="w-full h-full object-cover group-hover:scale-105 transition-transform" />
+                        </a>
+                      );
+                    })}
                   </div>
                 </div>
               )}
