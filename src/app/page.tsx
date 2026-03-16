@@ -136,7 +136,7 @@ export default function LandingPage() {
       <section id="pricing" className="py-24 md:py-28 px-6 md:px-20 scroll-mt-24">
         <p className="text-terracotta text-xs font-medium tracking-[0.18em] uppercase mb-4">Pricing</p>
         <h2 className="font-serif text-3xl md:text-4xl text-brown leading-tight mb-5">Simple, transparent<br />packages</h2>
-        <p className="text-muted max-w-md mb-14">No hidden fees. Start free, pay only when you're ready to scale.</p>
+        <p className="text-muted max-w-md mb-14">No hidden fees. Start free, pay only when you&apos;re ready to scale.</p>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-6xl">
           {/* Free tier */}
           <div className="p-8 rounded-lg border-2 border-sage bg-warm-white relative">

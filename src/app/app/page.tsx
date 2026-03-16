@@ -59,7 +59,7 @@ function AuthWall() {
         Get your first transformation free
       </h2>
       <p className="text-muted text-sm max-w-sm mb-2">
-        Create a free account with your phone number and we'll give you 1 complimentary transformation — no credit card required.
+        Create a free account with your phone number and we&apos;ll give you 1 complimentary transformation — no credit card required.
       </p>
       <p className="text-sage text-xs font-medium mb-8">🎁 1 free image · All 24 styles · Instant delivery</p>
       <div className="flex flex-wrap gap-4 justify-center">
