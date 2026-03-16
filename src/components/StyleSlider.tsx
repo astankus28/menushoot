@@ -217,8 +217,8 @@ export function StyleSlider() {
           </div>
         </div>
 
-        {/* Right: style picker */}
-        <div className="md:border-l border-t md:border-t-0 border-brown/10 flex flex-col divide-y divide-brown/8">
+        {/* Right: style picker — scrollable so slider stays visible */}
+        <div className="md:border-l border-t md:border-t-0 border-brown/10 flex flex-col divide-y divide-brown/8 overflow-y-auto max-h-[min(70vh,28rem)] md:max-h-[min(75vh,32rem)]">
           {STYLES.map((s, i) => {
             const isActive = s.id === active;
             const hasImage = s.url.trim() !== "";
