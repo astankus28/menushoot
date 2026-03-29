@@ -3,15 +3,21 @@
  */
 export async function compressImageForUpload(
   file: File,
-  options?: { maxEdge?: number; jpegQuality?: number; maxBytesBeforeCompress?: number }
+  options?: {
+    maxEdge?: number;
+    jpegQuality?: number;
+    /** Skip re-encoding only for JPEGs at or below this size (default ~350KB). */
+    maxBytesBeforeCompress?: number;
+  }
 ): Promise<File> {
   const maxEdge = options?.maxEdge ?? 2048;
   const jpegQuality = options?.jpegQuality ?? 0.82;
-  const maxBytesBeforeCompress = options?.maxBytesBeforeCompress ?? 1.2 * 1024 * 1024;
+  const skipIfSmallJpegBytes = options?.maxBytesBeforeCompress ?? 350 * 1024;
 
   if (!file.type.startsWith("image/")) return file;
   const isJpeg = file.type === "image/jpeg" || file.type === "image/jpg";
-  if (file.size <= maxBytesBeforeCompress && isJpeg) {
+  // Only skip tiny JPEGs; larger ones (even <4.5MB) can still be huge pixels or hit limits after base64 etc.
+  if (file.size <= skipIfSmallJpegBytes && isJpeg) {
     return file;
   }
 
