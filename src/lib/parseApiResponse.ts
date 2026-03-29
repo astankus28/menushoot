@@ -48,6 +48,9 @@ export function apiErrorMessage(
 
   if (parsed.json && typeof parsed.json.error === "string" && parsed.json.error.trim()) {
     const e = parsed.json.error.trim();
+    if (/unexpected token|not valid json|is not valid json/i.test(e)) {
+      return "The image service couldn’t process that photo. Try a smaller JPEG or re-upload.";
+    }
     if (/GOOGLE_GEMINI_API_KEY|not set in \.env/i.test(e)) {
       return "We couldn’t reach the image service. Please try again later.";
     }

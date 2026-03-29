@@ -5,6 +5,8 @@ import { GoogleGenAI, Modality } from "@google/genai";
 import { ConvexHttpClient } from "convex/browser";
 import { api } from "../../../../convex/_generated/api";
 import { ART_DIRECTION_STYLES, type StyleId } from "@/lib/prompts";
+import { cloudinaryFetchUrl } from "@/lib/cloudinaryDownscale";
+import { toPublicApiErrorMessage } from "@/lib/toPublicApiError";
 
 let cloudinaryReady = false;
 function initCloudinary() {
@@ -61,7 +63,7 @@ export async function POST(req: NextRequest) {
     let mimeType: string;
 
     if (imageUrl && imageUrl.startsWith("http")) {
-      const res = await fetch(imageUrl);
+      const res = await fetch(cloudinaryFetchUrl(imageUrl));
       if (!res.ok) throw new Error("Failed to fetch image from URL");
       const arr = await res.arrayBuffer();
       buffer = Buffer.from(arr);
@@ -72,6 +74,14 @@ export async function POST(req: NextRequest) {
     } else {
       return NextResponse.json(
         { error: "Please provide a valid image file or imageUrl" },
+        { status: 400 }
+      );
+    }
+
+    const maxImageBytes = 5 * 1024 * 1024;
+    if (buffer.byteLength > maxImageBytes) {
+      return NextResponse.json(
+        { error: "That image is too large to process. Try a smaller file or JPEG." },
         { status: 400 }
       );
     }
@@ -141,12 +151,8 @@ export async function POST(req: NextRequest) {
       { status: 500 }
     );
   } catch (err: unknown) {
-    const message = err instanceof Error ? err.message : "Transform failed";
     const status = (err as { status?: number })?.status ?? 500;
-    const is429 = message.includes("429") || message.includes("quota") || message.includes("RESOURCE_EXHAUSTED");
-    const friendlyError = is429
-      ? "Image generation requires a paid Google AI / Vertex AI plan. Enable billing at https://aistudio.google.com or https://console.cloud.google.com"
-      : message;
+    const friendlyError = toPublicApiErrorMessage(err);
     return NextResponse.json({ error: friendlyError }, { status });
   }
 }

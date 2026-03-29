@@ -3,6 +3,7 @@ import { auth } from "@clerk/nextjs/server";
 import { v2 as cloudinary } from "cloudinary";
 import { ConvexHttpClient } from "convex/browser";
 import { api } from "../../../../convex/_generated/api";
+import { toPublicApiErrorMessage } from "@/lib/toPublicApiError";
 
 let cloudinaryReady = false;
 function initCloudinary() {
@@ -71,7 +72,6 @@ export async function POST(req: NextRequest) {
 
     return NextResponse.json({ url: uploaded.secure_url });
   } catch (err) {
-    const message = err instanceof Error ? err.message : "Upload failed";
-    return NextResponse.json({ error: message }, { status: 500 });
+    return NextResponse.json({ error: toPublicApiErrorMessage(err) }, { status: 500 });
   }
 }
