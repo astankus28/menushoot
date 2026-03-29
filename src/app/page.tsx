@@ -4,6 +4,23 @@ import { BuyButton } from "@/components/BuyButton";
 import { StyleSlider } from "@/components/StyleSlider";
 import { Nav } from "@/components/Nav";
 
+const STRATEGY_SESSION_MAILTO = `mailto:hello@menushoot.ai?subject=${encodeURIComponent(
+  "Strategy Session Inquiry"
+)}&body=${encodeURIComponent(
+  `Hi Andrew,
+
+I'm interested in booking a Strategy Session. Here's a bit about my situation:
+
+Restaurant name:
+Location:
+How many menu items do you have?
+What platforms are you on? (UberEats, DoorDash, website, Instagram):
+What's your biggest photography challenge right now?
+Best time to meet (timezone):
+
+Thanks`
+)}`;
+
 export default function LandingPage() {
   return (
     <div className="min-h-screen bg-cream text-charcoal">
@@ -212,7 +229,7 @@ export default function LandingPage() {
               <h3 className="font-serif text-lg text-brown mb-2">Strategy Session</h3>
               <p className="text-muted text-sm leading-relaxed mb-4">60-minute call with Andrew: a custom style guide for your brand and a hands-on review of your current food photos.</p>
               <p className="font-serif text-2xl text-brown mb-5">$299</p>
-              <a href="mailto:hello@menushoot.ai?subject=Strategy Session"
+              <a href={STRATEGY_SESSION_MAILTO}
                 className="block w-full text-center py-3 px-6 rounded border-2 border-brown text-brown font-medium hover:bg-brown hover:text-cream transition-colors">
                 Book a Session
               </a>
