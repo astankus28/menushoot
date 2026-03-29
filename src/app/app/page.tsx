@@ -15,6 +15,7 @@ import { useQuery, useMutation } from "convex/react";
 import { api } from "../../../convex/_generated/api";
 import { BuyButton } from "@/components/BuyButton";
 import { ART_DIRECTION_STYLES } from "@/lib/prompts";
+import { VARIATION_ANGLES } from "@/lib/variationAngles";
 
 interface Variation {
   label: string;
@@ -31,7 +32,7 @@ interface IntakeData {
   customDescription: string;
 }
 
-const VARIATION_LABELS = ["Classic", "Dramatic", "Warm", "Editorial"];
+const VARIATION_LABELS = VARIATION_ANGLES.map((a) => a.label);
 
 function Toast({ message, type, onDismiss }: { message: string; type: "success" | "error" | "info"; onDismiss: () => void }) {
   useEffect(() => { const t = setTimeout(onDismiss, 6000); return () => clearTimeout(t); }, [onDismiss]);
