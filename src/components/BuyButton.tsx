@@ -3,11 +3,10 @@
 import { useState } from "react";
 import { parseApiResponse, apiErrorMessage } from "@/lib/parseApiResponse";
 
-type ProductId = "trial" | "starter" | "full" | "agency";
+type ProductId = "trial" | "full" | "agency";
 
 const LABELS: Record<ProductId, string> = {
   trial: "Get Started",
-  starter: "Get Started",
   full: "Get Started",
   agency: "Get Started",
 };

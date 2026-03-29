@@ -15,10 +15,10 @@ import { BuyButton } from "@/components/BuyButton";
 import { ART_DIRECTION_STYLES } from "@/lib/prompts";
 
 const PRODUCT_LABELS: Record<string, string> = {
-  trial: "Trial — 3 images ($99)",
-  starter: "Starter — 10 images ($249)",
-  full: "Full Menu — 25 images ($549)",
-  agency: "Agency Pro — 75/mo ($999)",
+  trial: "Trial — 3 credits ($29)",
+  starter: "Starter — 10 credits ($249)",
+  full: "Full Menu — 25 credits ($199)",
+  agency: "Agency — 75/mo ($399)",
 };
 
 export default function AccountPage() {
@@ -135,31 +135,25 @@ export default function AccountPage() {
             <h2 className="text-terracotta text-xs font-medium tracking-[0.18em] uppercase mb-3">
               Plans
             </h2>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
               <div className="p-5 rounded-lg border border-brown/10 bg-warm-white">
                 <p className="text-xs tracking-widest uppercase text-terracotta font-medium mb-2">Trial</p>
-                <p className="font-serif text-xl text-brown mb-1">$99</p>
+                <p className="font-serif text-xl text-brown mb-1">$29</p>
                 <p className="text-muted text-xs mb-4">3 credits</p>
                 <BuyButton productId="trial" variant="outline" compact />
-              </div>
-              <div className="p-5 rounded-lg border border-brown/10 bg-warm-white">
-                <p className="text-xs tracking-widest uppercase text-terracotta font-medium mb-2">Starter</p>
-                <p className="font-serif text-xl text-brown mb-1">$249</p>
-                <p className="text-muted text-xs mb-4">10 credits</p>
-                <BuyButton productId="starter" variant="outline" compact />
               </div>
               <div className="p-5 rounded-lg border-2 border-terracotta bg-brown text-cream relative">
                 <span className="absolute -top-2.5 left-1/2 -translate-x-1/2 bg-terracotta text-white text-[10px] tracking-wider uppercase px-3 py-0.5 rounded-full">
                   Popular
                 </span>
                 <p className="text-xs tracking-widest uppercase text-gold-light font-medium mb-2 mt-1">Full Menu</p>
-                <p className="font-serif text-xl text-cream mb-1">$549</p>
+                <p className="font-serif text-xl text-cream mb-1">$199</p>
                 <p className="text-cream/70 text-xs mb-4">25 credits</p>
                 <BuyButton productId="full" variant="filled" compact>Get 25</BuyButton>
               </div>
               <div className="p-5 rounded-lg border border-brown/10 bg-warm-white">
                 <p className="text-xs tracking-widest uppercase text-terracotta font-medium mb-2">Agency</p>
-                <p className="font-serif text-xl text-brown mb-1">$999<span className="text-sm font-light">/mo</span></p>
+                <p className="font-serif text-xl text-brown mb-1">$399<span className="text-sm font-light">/mo</span></p>
                 <p className="text-muted text-xs mb-4">75 credits/mo</p>
                 <BuyButton productId="agency" variant="outline" compact />
               </div>

@@ -183,7 +183,7 @@ export default function LandingPage() {
           </div>
           {/* Agency */}
           <div className="p-8 rounded-lg border border-brown/10 bg-warm-white">
-            <p className="text-xs tracking-[0.14em] uppercase text-terracotta font-medium mb-4">Agency Pro</p>
+            <p className="text-xs tracking-[0.14em] uppercase text-terracotta font-medium mb-4">Agency</p>
             <div className="font-serif text-3xl text-brown">$399<span className="text-base font-sans font-light">/mo</span></div>
             <p className="text-muted text-sm mt-2 mb-6">75 credits/month</p>
             <ul className="space-y-3 text-sm text-muted mb-8">
@@ -210,7 +210,7 @@ export default function LandingPage() {
             <div className="p-8 rounded-lg border border-brown/10 bg-cream hover:-translate-y-1 hover:shadow-xl transition-all">
               <span className="text-3xl block mb-4">🎯</span>
               <h3 className="font-serif text-lg text-brown mb-2">Strategy Session</h3>
-              <p className="text-muted text-sm leading-relaxed mb-4">60-minute 1-on-1 call. We review your current photos, identify the highest-impact improvements, and build a photography style guide for your brand.</p>
+              <p className="text-muted text-sm leading-relaxed mb-4">60-minute call with Andrew: a custom style guide for your brand and a hands-on review of your current food photos.</p>
               <p className="font-serif text-2xl text-brown mb-5">$299</p>
               <a href="mailto:hello@menushoot.ai?subject=Strategy Session"
                 className="block w-full text-center py-3 px-6 rounded border-2 border-brown text-brown font-medium hover:bg-brown hover:text-cream transition-colors">
@@ -219,10 +219,10 @@ export default function LandingPage() {
             </div>
             <div className="p-8 rounded-lg border-2 border-terracotta bg-brown text-cream hover:-translate-y-1 hover:shadow-xl transition-all">
               <span className="text-3xl block mb-4">✨</span>
-              <h3 className="font-serif text-lg text-cream mb-2">Done-For-You Package</h3>
-              <p className="text-cream/70 text-sm leading-relaxed mb-4">Andrew personally transforms your top 10 menu items, provides a style guide, and delivers platform-ready images with a consulting call included.</p>
+              <h3 className="font-serif text-lg text-cream mb-2">Done-For-You</h3>
+              <p className="text-cream/70 text-sm leading-relaxed mb-4">Andrew personally transforms 10 menu items for you. Consulting call included.</p>
               <p className="font-serif text-2xl text-cream mb-5">$599</p>
-              <a href="mailto:hello@menushoot.ai?subject=Done-For-You Package"
+              <a href="mailto:hello@menushoot.ai?subject=Done-For-You"
                 className="block w-full text-center py-3 px-6 rounded bg-terracotta text-white font-medium hover:bg-terra-light transition-colors">
                 Get Started
               </a>

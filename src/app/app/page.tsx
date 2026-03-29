@@ -72,21 +72,21 @@ function NoCreditsWall() {
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 w-full max-w-2xl">
         <div className="p-6 rounded-lg border border-brown/10 bg-warm-white text-center">
           <p className="text-xs tracking-widest uppercase text-terracotta font-medium mb-2">Trial</p>
-          <p className="font-serif text-2xl text-brown mb-1">$99</p>
-          <p className="text-muted text-xs mb-4">3 dish images</p>
+          <p className="font-serif text-2xl text-brown mb-1">$29</p>
+          <p className="text-muted text-xs mb-4">3 credits</p>
           <BuyButton productId="trial" variant="outline" />
         </div>
         <div className="p-6 rounded-lg border-2 border-terracotta bg-brown text-cream text-center relative">
           <span className="absolute -top-3 left-1/2 -translate-x-1/2 bg-terracotta text-white text-[10px] tracking-wider uppercase px-3 py-0.5 rounded-full">Most Popular</span>
           <p className="text-xs tracking-widest uppercase text-gold-light font-medium mb-2 mt-1">Full Menu</p>
-          <p className="font-serif text-2xl text-cream mb-1">$549</p>
-          <p className="text-cream/70 text-xs mb-4">25 dish images</p>
+          <p className="font-serif text-2xl text-cream mb-1">$199</p>
+          <p className="text-cream/70 text-xs mb-4">25 credits</p>
           <BuyButton productId="full" variant="filled" />
         </div>
         <div className="p-6 rounded-lg border border-brown/10 bg-warm-white text-center">
           <p className="text-xs tracking-widest uppercase text-terracotta font-medium mb-2">Agency</p>
-          <p className="font-serif text-2xl text-brown mb-1">$999<span className="text-base font-light font-sans">/mo</span></p>
-          <p className="text-muted text-xs mb-4">75 images/month</p>
+          <p className="font-serif text-2xl text-brown mb-1">$399<span className="text-base font-light font-sans">/mo</span></p>
+          <p className="text-muted text-xs mb-4">75 credits/month</p>
           <BuyButton productId="agency" variant="outline" />
         </div>
       </div>
@@ -496,7 +496,7 @@ function AppPageContent() {
                   {credits !== undefined && credits === 1 && (
                     <div className="text-center p-4 rounded-lg bg-gold/10 border border-gold/20">
                       <p className="text-brown text-sm font-medium mb-3">You have 1 credit left</p>
-                      <BuyButton productId="full" variant="filled" compact>Top up — 25 images for $549</BuyButton>
+                      <BuyButton productId="full" variant="filled" compact>Top up — 25 credits for $199</BuyButton>
                     </div>
                   )}
                 </div>
