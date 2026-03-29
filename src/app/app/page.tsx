@@ -16,6 +16,7 @@ import { api } from "../../../convex/_generated/api";
 import { BuyButton } from "@/components/BuyButton";
 import { ART_DIRECTION_STYLES } from "@/lib/prompts";
 import { VARIATION_ANGLES } from "@/lib/variationAngles";
+import { compressImageForUpload } from "@/lib/compressImageForUpload";
 
 interface Variation {
   label: string;
@@ -191,10 +192,17 @@ function AppPageContent() {
     if (user) {
       setIsUploading(true);
       try {
-        const fd = new FormData(); fd.append("image", f);
+        const toSend = await compressImageForUpload(f);
+        const fd = new FormData();
+        fd.append("image", toSend);
         const res = await fetch("/api/upload", { method: "POST", body: fd });
-        const data = await res.json();
-        if (!res.ok) throw new Error(data.error || "Upload failed");
+        const data = await res.json().catch(() => ({}));
+        if (!res.ok) {
+          if (res.status === 413) {
+            throw new Error("Photo is still too large after compression. Try a smaller image or export as JPEG.");
+          }
+          throw new Error((data as { error?: string }).error || "Upload failed");
+        }
         if (data.url) { setSelectedImageUrl(data.url); setPreview(data.url); setFile(null); }
         else throw new Error("No URL returned");
       } catch (err) {
@@ -223,7 +231,11 @@ function AppPageContent() {
     setIsGenerating(true);
     try {
       const fd = new FormData();
-      if (selectedImageUrl) fd.append("imageUrl", selectedImageUrl); else if (file) fd.append("image", file);
+      if (selectedImageUrl) {
+        fd.append("imageUrl", selectedImageUrl);
+      } else if (file) {
+        fd.append("image", await compressImageForUpload(file));
+      }
       fd.append("style", style);
       fd.append("variationIndex", String(variationIndex));
       if (intake.mood) fd.append("mood", intake.mood);
@@ -232,8 +244,13 @@ function AppPageContent() {
       if (intake.preserveNotes) fd.append("preserveNotes", intake.preserveNotes);
       if (intake.customDescription) fd.append("customDescription", intake.customDescription);
       const res = await fetch("/api/transform-variations", { method: "POST", body: fd });
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.error || "Transform failed");
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) {
+        if (res.status === 413) {
+          throw new Error("Image payload too large. Try a smaller photo or re-upload after saving as JPEG.");
+        }
+        throw new Error((data as { error?: string }).error || "Transform failed");
+      }
       if (data.variation) {
         setVariations((prev) => [...prev, data.variation]);
         setSelectedVariation(data.variation.index);
