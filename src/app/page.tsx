@@ -9,6 +9,7 @@ export default function LandingPage() {
     <div className="min-h-screen bg-cream text-charcoal">
       <Nav />
 
+      {/* Hero */}
       <section className="min-h-screen grid grid-cols-1 lg:grid-cols-2 pt-20 overflow-hidden">
         <div className="flex flex-col justify-center px-8 md:px-16 lg:px-20 py-16 lg:py-20">
           <p className="text-terracotta text-xs font-medium tracking-[0.18em] uppercase mb-5">AI-Powered Food Photography</p>
@@ -18,7 +19,7 @@ export default function LandingPage() {
             <br />Without a shoot.
           </h1>
           <p className="text-muted text-lg leading-relaxed max-w-md mb-6">
-            Send us your existing photos — even iPhone snaps. We deliver polished, professional menu imagery in 48 hours. No studio, no scheduling, no hassle.
+            Upload any photo — even an iPhone snap. Get 4 professional variations in 60 seconds. No studio, no scheduling, no photographer.
           </p>
           <p className="text-sage text-sm font-medium mb-8 flex items-center gap-2">
             <span className="text-base">🎁</span> Sign up free · Get 1 complimentary transformation · No credit card required
@@ -34,7 +35,7 @@ export default function LandingPage() {
           </div>
           <div className="flex gap-9 mt-14 pt-9 border-t border-brown/10">
             <div>
-              <strong className="block font-serif text-2xl text-brown mb-1">48hr</strong>
+              <strong className="block font-serif text-2xl text-brown mb-1">60sec</strong>
               <span className="text-muted text-xs tracking-wider">Turnaround</span>
             </div>
             <div>
@@ -42,8 +43,8 @@ export default function LandingPage() {
               <span className="text-muted text-xs tracking-wider">Years Experience</span>
             </div>
             <div>
-              <strong className="block font-serif text-2xl text-brown mb-1">Miami</strong>
-              <span className="text-muted text-xs tracking-wider">& Cleveland</span>
+              <strong className="block font-serif text-2xl text-brown mb-1">3,300+</strong>
+              <span className="text-muted text-xs tracking-wider">Projects Shot</span>
             </div>
           </div>
         </div>
@@ -65,6 +66,7 @@ export default function LandingPage() {
         </div>
       </section>
 
+      {/* Marquee */}
       <div className="bg-brown text-gold-light py-3.5 overflow-hidden">
         <div className="flex animate-[marquee_22s_linear_infinite] whitespace-nowrap">
           {["UberEats", "DoorDash", "Grubhub", "Restaurant Menus", "Social Media", "Ghost Kitchens", "Hospitality Brands", "Food Trucks"].flatMap((item) => [
@@ -78,35 +80,35 @@ export default function LandingPage() {
         </div>
       </div>
 
+      {/* How it works */}
       <section id="how" className="py-24 md:py-28 px-6 md:px-20 scroll-mt-24">
         <p className="text-terracotta text-xs font-medium tracking-[0.18em] uppercase mb-4">The Process</p>
         <h2 className="font-serif text-3xl md:text-4xl text-brown leading-tight mb-5">Three steps to a<br />stunning menu</h2>
-        <p className="text-muted max-w-md mb-16">No scheduling. No studio time. No travel. Just great food photography delivered to your inbox.</p>
+        <p className="text-muted max-w-md mb-16">No scheduling. No studio time. No travel. Upload your photo and have professional results in 60 seconds.</p>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
           <div className="p-8 rounded-lg bg-warm-white border border-brown/10 relative hover:-translate-y-1 hover:shadow-xl transition-all">
             <span className="absolute top-5 right-7 font-serif text-4xl text-terracotta/20 font-bold">01</span>
             <span className="text-3xl block mb-5">📸</span>
-            <h3 className="font-serif text-lg text-brown mb-3">Send your photos</h3>
-            <p className="text-muted text-sm leading-relaxed">Share any existing images — even iPhone shots. We also work from Instagram, menu PDFs, or Google listing.</p>
+            <h3 className="font-serif text-lg text-brown mb-3">Upload your photo</h3>
+            <p className="text-muted text-sm leading-relaxed">Drop in any existing image — iPhone shots, Google listing photos, or screenshots from your menu. We work with what you have.</p>
           </div>
           <div className="p-8 rounded-lg bg-warm-white border border-brown/10 relative hover:-translate-y-1 hover:shadow-xl transition-all">
             <span className="absolute top-5 right-7 font-serif text-4xl text-terracotta/20 font-bold">02</span>
             <span className="text-3xl block mb-5">🎨</span>
-            <h3 className="font-serif text-lg text-brown mb-3">We craft the visuals</h3>
-            <p className="text-muted text-sm leading-relaxed">Our AI tools — guided by 16 years of professional food photography — generate polished hero shots. Every image is art directed.</p>
+            <h3 className="font-serif text-lg text-brown mb-3">Choose your style</h3>
+            <p className="text-muted text-sm leading-relaxed">Pick from 24 professional styles — Editorial, Moody, UberEats-optimized, Fine Dining, and more. Tell us exactly what you want.</p>
           </div>
           <div className="p-8 rounded-lg bg-warm-white border border-brown/10 relative hover:-translate-y-1 hover:shadow-xl transition-all">
             <span className="absolute top-5 right-7 font-serif text-4xl text-terracotta/20 font-bold">03</span>
             <span className="text-3xl block mb-5">⚡</span>
-            <h3 className="font-serif text-lg text-brown mb-3">Receive in 48 hours</h3>
-            <p className="text-muted text-sm leading-relaxed">Your images arrive optimized for UberEats, DoorDash, Grubhub, and social. Request revisions at no extra cost.</p>
+            <h3 className="font-serif text-lg text-brown mb-3">Get 4 variations in 60 seconds</h3>
+            <p className="text-muted text-sm leading-relaxed">We generate multiple interpretations so you can pick the one that fits. Download instantly, optimized for every platform.</p>
           </div>
         </div>
-
-        {/* Before/After style slider */}
         <StyleSlider />
       </section>
 
+      {/* Portfolio */}
       <section id="portfolio" className="py-24 md:py-28 px-6 md:px-20 bg-warm-white scroll-mt-24">
         <p className="text-terracotta text-xs font-medium tracking-[0.18em] uppercase mb-4">Our Work</p>
         <h2 className="font-serif text-3xl md:text-4xl text-brown leading-tight mb-5">Every dish, made to<br /><em className="text-terracotta italic">look irresistible</em></h2>
@@ -133,21 +135,22 @@ export default function LandingPage() {
         </div>
       </section>
 
+      {/* Pricing */}
       <section id="pricing" className="py-24 md:py-28 px-6 md:px-20 scroll-mt-24">
         <p className="text-terracotta text-xs font-medium tracking-[0.18em] uppercase mb-4">Pricing</p>
         <h2 className="font-serif text-3xl md:text-4xl text-brown leading-tight mb-5">Simple, transparent<br />packages</h2>
         <p className="text-muted max-w-md mb-14">No hidden fees. Start free, pay only when you&apos;re ready to scale.</p>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-6xl">
-          {/* Free tier */}
+          {/* Free */}
           <div className="p-8 rounded-lg border-2 border-sage bg-warm-white relative">
             <span className="absolute -top-3 left-1/2 -translate-x-1/2 bg-sage text-white text-[10px] tracking-wider uppercase px-4 py-1 rounded-full">Start Here</span>
             <p className="text-xs tracking-[0.14em] uppercase text-sage font-medium mb-4 mt-2">Free</p>
             <div className="font-serif text-3xl text-brown">$0</div>
-            <p className="text-muted text-sm mt-2 mb-6">1 dish image</p>
+            <p className="text-muted text-sm mt-2 mb-6">1 credit · 4 variations</p>
             <ul className="space-y-3 text-sm text-muted mb-8">
               <li className="flex items-center gap-2"><span className="text-sage">✓</span> 1 free transformation</li>
               <li className="flex items-center gap-2"><span className="text-sage">✓</span> All 24 styles</li>
-              <li className="flex items-center gap-2"><span className="text-sage">✓</span> Phone verification required</li>
+              <li className="flex items-center gap-2"><span className="text-sage">✓</span> 4 variations per credit</li>
             </ul>
             <Link href="/app" className="block w-full text-center py-3 px-6 rounded border-2 border-sage text-sage font-medium hover:bg-sage hover:text-white transition-colors">
               Get Started Free
@@ -156,11 +159,11 @@ export default function LandingPage() {
           {/* Trial */}
           <div className="p-8 rounded-lg border border-brown/10 bg-warm-white">
             <p className="text-xs tracking-[0.14em] uppercase text-terracotta font-medium mb-4">Trial</p>
-            <div className="font-serif text-3xl text-brown">$99</div>
-            <p className="text-muted text-sm mt-2 mb-6">3 dish images</p>
+            <div className="font-serif text-3xl text-brown">$29</div>
+            <p className="text-muted text-sm mt-2 mb-6">3 credits · up to 12 variations</p>
             <ul className="space-y-3 text-sm text-muted mb-8">
-              <li className="flex items-center gap-2"><span className="text-sage">✓</span> 48-hour delivery</li>
-              <li className="flex items-center gap-2"><span className="text-sage">✓</span> 1 revision round</li>
+              <li className="flex items-center gap-2"><span className="text-sage">✓</span> Results in 60 seconds</li>
+              <li className="flex items-center gap-2"><span className="text-sage">✓</span> All 24 styles</li>
               <li className="flex items-center gap-2"><span className="text-sage">✓</span> All platform formats</li>
             </ul>
             <BuyButton productId="trial" variant="outline" />
@@ -169,26 +172,61 @@ export default function LandingPage() {
           <div className="p-8 rounded-lg border-2 border-terracotta bg-brown text-cream relative">
             <span className="absolute -top-3 left-1/2 -translate-x-1/2 bg-terracotta text-white text-[10px] tracking-wider uppercase px-4 py-1 rounded-full">Most Popular</span>
             <p className="text-xs tracking-[0.14em] uppercase text-gold-light font-medium mb-4 mt-2">Full Menu</p>
-            <div className="font-serif text-3xl text-cream">$549</div>
-            <p className="text-cream/70 text-sm mt-2 mb-6">25 dish images</p>
+            <div className="font-serif text-3xl text-cream">$199</div>
+            <p className="text-cream/70 text-sm mt-2 mb-6">25 credits · up to 100 variations</p>
             <ul className="space-y-3 text-sm text-cream/80 mb-8">
-              <li className="flex items-center gap-2"><span className="text-gold">✓</span> 48-hour delivery</li>
-              <li className="flex items-center gap-2"><span className="text-gold">✓</span> Unlimited revisions</li>
+              <li className="flex items-center gap-2"><span className="text-gold">✓</span> Results in 60 seconds</li>
+              <li className="flex items-center gap-2"><span className="text-gold">✓</span> All 24 styles</li>
               <li className="flex items-center gap-2"><span className="text-gold">✓</span> Style consistency pass</li>
             </ul>
             <BuyButton productId="full" variant="filled" />
           </div>
-          {/* Agency Pro */}
+          {/* Agency */}
           <div className="p-8 rounded-lg border border-brown/10 bg-warm-white">
             <p className="text-xs tracking-[0.14em] uppercase text-terracotta font-medium mb-4">Agency Pro</p>
-            <div className="font-serif text-3xl text-brown">$999<span className="text-base font-sans font-light">/mo</span></div>
-            <p className="text-muted text-sm mt-2 mb-6">75 images/month</p>
+            <div className="font-serif text-3xl text-brown">$399<span className="text-base font-sans font-light">/mo</span></div>
+            <p className="text-muted text-sm mt-2 mb-6">75 credits/month</p>
             <ul className="space-y-3 text-sm text-muted mb-8">
-              <li className="flex items-center gap-2"><span className="text-sage">✓</span> 24-hour priority</li>
-              <li className="flex items-center gap-2"><span className="text-sage">✓</span> Unlimited revisions</li>
+              <li className="flex items-center gap-2"><span className="text-sage">✓</span> Results in 60 seconds</li>
+              <li className="flex items-center gap-2"><span className="text-sage">✓</span> Unlimited variations</li>
               <li className="flex items-center gap-2"><span className="text-sage">✓</span> Multi-seat access</li>
             </ul>
             <BuyButton productId="agency" variant="outline" />
+          </div>
+        </div>
+      </section>
+
+      {/* White Glove Consulting */}
+      <section id="consulting" className="py-24 md:py-28 px-6 md:px-20 bg-warm-white scroll-mt-24">
+        <div className="max-w-4xl">
+          <p className="text-terracotta text-xs font-medium tracking-[0.18em] uppercase mb-4">White Glove Service</p>
+          <h2 className="font-serif text-3xl md:text-4xl text-brown leading-tight mb-5">
+            Work directly<br /><em className="text-terracotta italic">with Andrew</em>
+          </h2>
+          <p className="text-muted max-w-lg mb-12 leading-relaxed">
+            16 years shooting for UberEats, DoorDash, and Grubhub across 3,300+ projects. Book a 1-on-1 session to get personalized strategy, style direction, and hands-on transformation of your menu photos.
+          </p>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="p-8 rounded-lg border border-brown/10 bg-cream hover:-translate-y-1 hover:shadow-xl transition-all">
+              <span className="text-3xl block mb-4">🎯</span>
+              <h3 className="font-serif text-lg text-brown mb-2">Strategy Session</h3>
+              <p className="text-muted text-sm leading-relaxed mb-4">60-minute 1-on-1 call. We review your current photos, identify the highest-impact improvements, and build a photography style guide for your brand.</p>
+              <p className="font-serif text-2xl text-brown mb-5">$299</p>
+              <a href="mailto:hello@menushoot.ai?subject=Strategy Session"
+                className="block w-full text-center py-3 px-6 rounded border-2 border-brown text-brown font-medium hover:bg-brown hover:text-cream transition-colors">
+                Book a Session
+              </a>
+            </div>
+            <div className="p-8 rounded-lg border-2 border-terracotta bg-brown text-cream hover:-translate-y-1 hover:shadow-xl transition-all">
+              <span className="text-3xl block mb-4">✨</span>
+              <h3 className="font-serif text-lg text-cream mb-2">Done-For-You Package</h3>
+              <p className="text-cream/70 text-sm leading-relaxed mb-4">Andrew personally transforms your top 10 menu items, provides a style guide, and delivers platform-ready images with a consulting call included.</p>
+              <p className="font-serif text-2xl text-cream mb-5">$599</p>
+              <a href="mailto:hello@menushoot.ai?subject=Done-For-You Package"
+                className="block w-full text-center py-3 px-6 rounded bg-terracotta text-white font-medium hover:bg-terra-light transition-colors">
+                Get Started
+              </a>
+            </div>
           </div>
         </div>
       </section>
@@ -204,16 +242,12 @@ export default function LandingPage() {
             Not sure which package is right for you, or want to see a sample transformation with one of your own photos first? Send a message — usually respond same day.
           </p>
           <div className="flex flex-col sm:flex-row gap-4">
-            <a
-              href="mailto:hello@menushoot.ai"
-              className="inline-flex items-center justify-center gap-2 bg-terracotta text-white py-4 px-8 rounded font-medium hover:bg-terra-light transition-colors"
-            >
+            <a href="mailto:hello@menushoot.ai"
+              className="inline-flex items-center justify-center gap-2 bg-terracotta text-white py-4 px-8 rounded font-medium hover:bg-terra-light transition-colors">
               ✉ hello@menushoot.ai
             </a>
-            <Link
-              href="/app"
-              className="inline-flex items-center justify-center gap-2 border border-cream/30 text-cream py-4 px-8 rounded font-medium hover:border-cream hover:bg-cream/5 transition-colors"
-            >
+            <Link href="/app"
+              className="inline-flex items-center justify-center gap-2 border border-cream/30 text-cream py-4 px-8 rounded font-medium hover:border-cream hover:bg-cream/5 transition-colors">
               Try It Now →
             </Link>
           </div>
