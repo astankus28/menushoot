@@ -8,6 +8,7 @@ export const save = mutation({
     publicId: v.string(),
     url: v.string(),
     style: v.string(),
+    variationLabel: v.optional(v.string()),
   },
   handler: async (ctx, args) => {
     const user = await ctx.db
@@ -21,6 +22,7 @@ export const save = mutation({
       publicId: args.publicId,
       url: args.url,
       style: args.style,
+      variationLabel: args.variationLabel,
       createdAt: Date.now(),
     });
   },

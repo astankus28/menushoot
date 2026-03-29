@@ -212,6 +212,7 @@ export default function AccountPage() {
               <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
                 {pastImages.map((img) => {
                   const styleLabel = styles.find((s) => s.id === img.style)?.label ?? img.style;
+                  const caption = img.variationLabel ? `${styleLabel} · ${img.variationLabel}` : styleLabel;
                   return (
                     <a
                       key={img._id}
@@ -223,12 +224,12 @@ export default function AccountPage() {
                       <div className="aspect-square relative">
                         <img
                           src={img.url}
-                          alt={styleLabel}
+                          alt={caption}
                           className="w-full h-full object-cover group-hover:scale-105 transition-transform"
                         />
                       </div>
-                      <p className="px-3 py-2 text-xs text-muted truncate" title={styleLabel}>
-                        {styleLabel}
+                      <p className="px-3 py-2 text-xs text-muted truncate" title={caption}>
+                        {caption}
                       </p>
                     </a>
                   );

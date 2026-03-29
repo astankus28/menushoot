@@ -340,10 +340,11 @@ function AppPageContent() {
                   <div className="flex gap-3 overflow-x-auto pb-2 -mx-1 scrollbar-thin">
                     {pastImages.map((img) => {
                       const styleLabel = allStyles.find((s) => s.id === img.style)?.label ?? img.style;
+                      const caption = img.variationLabel ? `${styleLabel} · ${img.variationLabel}` : styleLabel;
                       return (
-                        <a key={img._id} href={img.url} target="_blank" rel="noopener noreferrer"
+                        <a key={img._id} href={img.url} target="_blank" rel="noopener noreferrer" title={caption}
                           className="flex-shrink-0 w-20 h-20 rounded-lg overflow-hidden border-2 border-brown/10 hover:border-terracotta/60 transition-all group">
-                          <img src={img.url} alt={styleLabel} className="w-full h-full object-cover group-hover:scale-105 transition-transform" />
+                          <img src={img.url} alt={caption} className="w-full h-full object-cover group-hover:scale-105 transition-transform" />
                         </a>
                       );
                     })}

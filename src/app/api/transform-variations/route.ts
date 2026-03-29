@@ -139,7 +139,7 @@ export async function POST(req: NextRequest) {
       }
     }
 
-    if (isFirstCall && convexUrl && userId && !finalUrl.startsWith("data:")) {
+    if (convexUrl && userId && !finalUrl.startsWith("data:") && publicId) {
       try {
         const historyClient = new ConvexHttpClient(convexUrl);
         await historyClient.mutation(api.images.save, {
@@ -147,6 +147,7 @@ export async function POST(req: NextRequest) {
           publicId,
           url: finalUrl,
           style: styleId,
+          variationLabel: angle.label,
         });
       } catch {
         // Non-fatal

@@ -29,6 +29,8 @@ export default defineSchema({
     publicId: v.string(),
     url: v.string(),
     style: v.string(),
+    /** Angle label when saved from /api/transform-variations (e.g. "Hero"). */
+    variationLabel: v.optional(v.string()),
     createdAt: v.number(),
   }).index("by_user", ["userId"]),
 
