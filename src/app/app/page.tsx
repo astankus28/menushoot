@@ -278,6 +278,9 @@ function AppPageContent() {
   const allStyles = Object.values(ART_DIRECTION_STYLES);
   const isSignedIn = isLoaded && !!user;
   const hasVariations = variations.length > 0;
+  /** Keep workspace visible if we already have variations — don’t hide them when `preview` flickers or clears. */
+  const showWorkspace = Boolean(preview) || hasVariations;
+  const originalSrc = preview ?? selectedImageUrl ?? "";
   const canGenerateMore = nextVariationIndex >= 0 && nextVariationIndex < 4 && !isGenerating;
   const isFirstGeneration = variations.length === 0;
 
@@ -348,7 +351,7 @@ function AppPageContent() {
                 </div>
               )}
 
-              {!preview ? (
+              {!showWorkspace ? (
                 <div onDrop={handleDrop} onDragOver={handleDragOver} onDragLeave={handleDragLeave}
                   className={`border-2 border-dashed rounded-lg p-12 md:p-16 text-center transition-colors cursor-pointer ${isDragging ? "border-terracotta bg-terracotta/5" : "border-muted/40 hover:border-muted hover:bg-warm-white/50"} ${isUploading ? "opacity-60 pointer-events-none" : ""}`}>
                   <input type="file" accept="image/*" onChange={handleInputChange} className="hidden" id="upload" disabled={isUploading} />
@@ -366,9 +369,17 @@ function AppPageContent() {
                   <div className="bg-warm-white border border-brown/10 rounded-lg overflow-hidden">
                     <div className="px-4 py-2.5 border-b border-brown/10 flex items-center justify-between">
                       <p className="text-xs tracking-widest uppercase text-muted font-medium">Original Photo</p>
-                      <button onClick={handleReset} className="text-xs text-muted hover:text-terracotta transition-colors">Change photo</button>
+                      <button type="button" onClick={handleReset} className="text-xs text-muted hover:text-terracotta transition-colors">Change photo</button>
                     </div>
-                    <div className="aspect-[16/6] bg-cream"><img src={preview} alt="Original" className="w-full h-full object-contain" /></div>
+                    <div className="aspect-[16/6] bg-cream">
+                      {originalSrc ? (
+                        <img src={originalSrc} alt="Original" className="w-full h-full object-contain" draggable={false} />
+                      ) : (
+                        <div className="w-full h-full flex items-center justify-center text-muted text-sm px-4 text-center">
+                          Preview unavailable — your variations below are still here. Use &ldquo;Change photo&rdquo; to start over.
+                        </div>
+                      )}
+                    </div>
                   </div>
 
                   {/* Style picker */}
@@ -407,8 +418,19 @@ function AppPageContent() {
 
                       <div className="grid grid-cols-2 gap-4">
                         {variations.map((v) => (
-                          <div key={v.index} onClick={() => setSelectedVariation(v.index)}
-                            className={`rounded-lg overflow-hidden border-2 transition-all cursor-pointer ${selectedVariation === v.index ? "border-terracotta ring-2 ring-terracotta/20" : "border-brown/10 hover:border-terracotta/40"}`}>
+                          <div
+                            key={`${v.index}-${v.label}`}
+                            role="button"
+                            tabIndex={0}
+                            onClick={() => setSelectedVariation(v.index)}
+                            onKeyDown={(e) => {
+                              if (e.key === "Enter" || e.key === " ") {
+                                e.preventDefault();
+                                setSelectedVariation(v.index);
+                              }
+                            }}
+                            className={`rounded-lg overflow-hidden border-2 transition-all cursor-pointer ${selectedVariation === v.index ? "border-terracotta ring-2 ring-terracotta/20" : "border-brown/10 hover:border-terracotta/40"}`}
+                          >
                             <div className="px-3 py-2 border-b border-brown/10 bg-warm-white flex items-center justify-between">
                               <div>
                                 <p className="text-xs font-semibold text-brown">{v.label}</p>
@@ -416,8 +438,22 @@ function AppPageContent() {
                               </div>
                               {selectedVariation === v.index && <span className="text-[10px] bg-terracotta text-white px-2 py-0.5 rounded-full font-medium">Selected</span>}
                             </div>
-                            <div className="aspect-[4/3] bg-cream">
-                              <img src={v.url} alt={v.label} className="w-full h-full object-contain" />
+                            <div className="aspect-[4/3] bg-cream relative">
+                              <img
+                                src={v.url}
+                                alt={v.label}
+                                className="w-full h-full object-contain pointer-events-none select-none"
+                                draggable={false}
+                              />
+                              <a
+                                href={v.url}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="absolute bottom-2 right-2 text-[10px] font-medium bg-charcoal/80 text-white px-2 py-1 rounded hover:bg-charcoal"
+                                onClick={(e) => e.stopPropagation()}
+                              >
+                                Open full size
+                              </a>
                             </div>
                           </div>
                         ))}
