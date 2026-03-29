@@ -60,7 +60,7 @@ export default function LandingPage() {
             Upload any photo — even an iPhone snap. Get 4 professional variations in 60 seconds. No studio, no scheduling, no photographer.
           </p>
           <p className="text-sage text-sm font-medium mb-8 flex items-center gap-2">
-            <span className="text-base">🎁</span> Sign up free · Get 1 complimentary transformation · No credit card required
+            <span className="text-base">🎁</span> Free to try · 1 photo on us · No credit card required
           </p>
           <div className="flex flex-wrap gap-4">
             <Link href="/app" className="inline-block bg-terracotta text-white py-4 px-8 rounded font-medium hover:bg-brown transition-all hover:-translate-y-0.5 hover:shadow-lg">
@@ -186,7 +186,7 @@ export default function LandingPage() {
             <div className="font-serif text-3xl text-brown">$0</div>
             <p className="text-muted text-sm mt-2 mb-6">1 credit · 4 variations</p>
             <ul className="space-y-3 text-sm text-muted mb-8">
-              <li className="flex items-center gap-2"><span className="text-sage">✓</span> 1 free transformation</li>
+              <li className="flex items-center gap-2"><span className="text-sage">✓</span> 1 photo on us</li>
               <li className="flex items-center gap-2"><span className="text-sage">✓</span> All 24 styles</li>
               <li className="flex items-center gap-2"><span className="text-sage">✓</span> 4 variations per credit</li>
             </ul>

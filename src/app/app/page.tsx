@@ -53,8 +53,8 @@ function AuthWall() {
     <div className="flex flex-col items-center justify-center py-20 px-6 text-center">
       <span className="text-5xl mb-6">📸</span>
       <h2 className="font-serif text-2xl text-brown mb-3">Get your first transformation free</h2>
-      <p className="text-muted text-sm max-w-sm mb-2">Create a free account and we&apos;ll give you 1 complimentary transformation — no credit card required.</p>
-      <p className="text-sage text-xs font-medium mb-8">🎁 1 free image · All 24 styles · Up to 4 variations per credit</p>
+      <p className="text-muted text-sm max-w-sm mb-2">Free to try — create an account and get 1 photo on us. No credit card required.</p>
+      <p className="text-sage text-xs font-medium mb-8">🎁 1 photo on us · All 24 styles · Up to 4 variations per credit</p>
       <div className="flex flex-wrap gap-4 justify-center">
         <SignUpButton><button className="bg-terracotta text-white py-3 px-8 rounded font-medium hover:bg-brown transition-colors">Create free account</button></SignUpButton>
         <SignInButton><button className="border border-brown text-brown py-3 px-8 rounded font-medium hover:bg-brown hover:text-cream transition-colors">Sign in</button></SignInButton>
