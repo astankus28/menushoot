@@ -20,7 +20,100 @@ function initCloudinary() {
   return false;
 }
 
-const DEFAULT_STYLE: StyleId = "editorial";
+// The 4 variation angles — each interprets the style differently
+const VARIATION_ANGLES = [
+  {
+    label: "Classic",
+    description: "The expected, refined interpretation of the style",
+    modifier: "Apply this style faithfully and professionally — the clean, expected, most universally appealing version. Refined and safe.",
+  },
+  {
+    label: "Dramatic",
+    description: "Push the contrast and mood further",
+    modifier: "Push this style to its dramatic extreme — heighten contrast, deepen shadows or brighten highlights, maximize the mood. Make it bold and striking.",
+  },
+  {
+    label: "Warm",
+    description: "Lean into warmth and appetite appeal",
+    modifier: "Apply this style with a warm color temperature bias — golden tones, amber light, inviting warmth. Prioritize appetite appeal and coziness over drama.",
+  },
+  {
+    label: "Editorial",
+    description: "Magazine-ready, precise composition",
+    modifier: "Apply this style as if shooting for a high-end food magazine — precise composition, strong negative space, deliberate prop placement implied, everything intentional. Think Bon Appétit or Food & Wine.",
+  },
+];
+
+function buildVariationPrompt(
+  basePrompt: string,
+  angle: typeof VARIATION_ANGLES[number],
+  intake: {
+    mood?: string;
+    usage?: string;
+    reference?: string;
+    preserveNotes?: string;
+    customDescription?: string;
+  }
+): string {
+  let prompt = basePrompt;
+
+  // Inject intake context
+  if (intake.mood) {
+    prompt += ` Overall mood preference: ${intake.mood}.`;
+  }
+  if (intake.usage) {
+    prompt += ` This image will be used for: ${intake.usage}.`;
+  }
+  if (intake.preserveNotes) {
+    prompt += ` Client note — preserve or change: ${intake.preserveNotes}.`;
+  }
+  if (intake.customDescription) {
+    prompt += ` Additional client direction: ${intake.customDescription}.`;
+  }
+  if (intake.reference) {
+    prompt += ` The client referenced this style inspiration: ${intake.reference}.`;
+  }
+
+  // Inject the variation angle modifier
+  prompt += ` VARIATION DIRECTION: ${angle.modifier}`;
+
+  return prompt;
+}
+
+async function runSingleTransform(
+  ai: GoogleGenAI,
+  base64: string,
+  mimeType: string,
+  prompt: string
+): Promise<string | null> {
+  try {
+    const response = await ai.models.generateContent({
+      model: "gemini-3.1-flash-image-preview",
+      contents: [
+        {
+          role: "user",
+          parts: [
+            { inlineData: { mimeType, data: base64 } },
+            { text: prompt },
+          ],
+        },
+      ],
+      config: {
+        responseModalities: [Modality.TEXT, Modality.IMAGE],
+      },
+    });
+
+    const parts = response.candidates?.[0]?.content?.parts ?? [];
+    for (const part of parts) {
+      if ("inlineData" in part && part.inlineData?.data) {
+        return `data:${part.inlineData.mimeType || "image/png"};base64,${part.inlineData.data}`;
+      }
+    }
+    return null;
+  } catch {
+    return null;
+  }
+}
 
 export async function POST(req: NextRequest) {
   try {
@@ -42,6 +135,7 @@ export async function POST(req: NextRequest) {
           { status: 402 }
         );
       }
+      // Deduct 1 credit for all 4 variations
       await client.mutation(api.users.deductCredit, { clerkId: userId });
     }
 
@@ -76,90 +170,90 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    const styleId = (formData.get("style") as string) || DEFAULT_STYLE;
-    const style = ART_DIRECTION_STYLES[styleId as StyleId] ?? ART_DIRECTION_STYLES[DEFAULT_STYLE];
-    const prompt = style.prompt;
+    const styleId = (formData.get("style") as string) || "editorial";
+    const style = ART_DIRECTION_STYLES[styleId as StyleId] ?? ART_DIRECTION_STYLES["editorial"];
+
+    // Intake fields
+    const intake = {
+      mood: (formData.get("mood") as string) || undefined,
+      usage: (formData.get("usage") as string) || undefined,
+      reference: (formData.get("reference") as string) || undefined,
+      preserveNotes: (formData.get("preserveNotes") as string) || undefined,
+      customDescription: (formData.get("customDescription") as string) || undefined,
+    };
 
     const base64 = buffer.toString("base64");
-
-    // Nano Banana Pro uses gemini-3.1-flash-image-preview for all styles
-    // (gemini-3-pro-image-preview was deprecated March 9, 2026)
-    // The green screen prompt technique handles quality improvement
-    const geminiModel = "gemini-3.1-flash-image-preview";
-
     const ai = new GoogleGenAI({ apiKey });
 
-    const response = await ai.models.generateContent({
-      model: geminiModel,
-      contents: [
-        {
-          role: "user",
-          parts: [
-            {
-              inlineData: {
-                mimeType,
-                data: base64,
-              },
-            },
-            { text: prompt },
-          ],
-        },
-      ],
-      config: {
-        responseModalities: [Modality.TEXT, Modality.IMAGE],
-      },
+    // Fire all 4 variations in parallel
+    const variationPromises = VARIATION_ANGLES.map((angle) => {
+      const prompt = buildVariationPrompt(style.prompt, angle, intake);
+      return runSingleTransform(ai, base64, mimeType, prompt);
     });
 
-    const parts = response.candidates?.[0]?.content?.parts ?? [];
+    const results = await Promise.all(variationPromises);
 
-    for (const part of parts) {
-      if ("inlineData" in part && part.inlineData?.data) {
-        const imgBase64 = part.inlineData.data;
-        const imgMime = part.inlineData.mimeType || "image/png";
-        const geminiDataUrl = `data:${imgMime};base64,${imgBase64}`;
+    // Upload successful results to Cloudinary
+    const cloudinaryReady = initCloudinary();
+    const variations = await Promise.all(
+      results.map(async (dataUrl, i) => {
+        if (!dataUrl) return { label: VARIATION_ANGLES[i].label, description: VARIATION_ANGLES[i].description, url: null };
 
-        if (initCloudinary()) {
-          const uploaded = await cloudinary.uploader.upload(geminiDataUrl, {
-            folder: "menushoot/transforms",
-            resource_type: "image",
-          });
-
-          // Save to Convex history
-          if (convexUrl && userId) {
-            try {
-              const { api: convexApi } = await import("../../../../convex/_generated/api");
-              const historyClient = new ConvexHttpClient(convexUrl);
-              await historyClient.mutation(convexApi.images.save, {
-                clerkId: userId,
-                publicId: uploaded.public_id,
-                url: uploaded.secure_url,
-                style: styleId,
-              });
-            } catch {
-              // Non-fatal
-            }
+        if (cloudinaryReady) {
+          try {
+            const uploaded = await cloudinary.uploader.upload(dataUrl, {
+              folder: "menushoot/variations",
+              resource_type: "image",
+            });
+            return {
+              label: VARIATION_ANGLES[i].label,
+              description: VARIATION_ANGLES[i].description,
+              url: uploaded.secure_url,
+              publicId: uploaded.public_id,
+            };
+          } catch {
+            return { label: VARIATION_ANGLES[i].label, description: VARIATION_ANGLES[i].description, url: dataUrl };
           }
-
-          return NextResponse.json({ image: uploaded.secure_url });
         }
 
-        return NextResponse.json({ image: geminiDataUrl });
+        return { label: VARIATION_ANGLES[i].label, description: VARIATION_ANGLES[i].description, url: dataUrl };
+      })
+    );
+
+    // Save chosen variation to history when user downloads (tracked separately)
+    // For now, save the first successful one to history
+    if (convexUrl && userId) {
+      const firstSuccess = variations.find((v) => v.url);
+      if (firstSuccess?.url && !firstSuccess.url.startsWith("data:")) {
+        try {
+          const historyClient = new ConvexHttpClient(convexUrl);
+          await historyClient.mutation(api.images.save, {
+            clerkId: userId,
+            publicId: (firstSuccess as { publicId?: string }).publicId ?? "",
+            url: firstSuccess.url,
+            style: styleId,
+          });
+        } catch {
+          // Non-fatal
+        }
       }
     }
 
-    return NextResponse.json(
-      {
-        error:
-          "Image generation did not return an image. Try again or check your API quota at https://ai.google.dev/gemini-api/docs/rate-limits.",
-      },
-      { status: 500 }
-    );
+    const successful = variations.filter((v) => v.url);
+    if (successful.length === 0) {
+      return NextResponse.json(
+        { error: "Image generation did not return any results. Check your API quota." },
+        { status: 500 }
+      );
+    }
+
+    return NextResponse.json({ variations });
   } catch (err: unknown) {
     const message = err instanceof Error ? err.message : "Transform failed";
     const status = (err as { status?: number })?.status ?? 500;
     const is429 = message.includes("429") || message.includes("quota") || message.includes("RESOURCE_EXHAUSTED");
     const friendlyError = is429
-      ? "Image generation requires a paid Google AI / Vertex AI plan. The free tier does not include image-generation models. Enable billing at https://aistudio.google.com or https://console.cloud.google.com"
+      ? "Image generation requires a paid Google AI plan. Enable billing at https://aistudio.google.com"
       : message;
     return NextResponse.json({ error: friendlyError }, { status });
   }
