@@ -19,7 +19,8 @@ import { ART_DIRECTION_STYLES } from "@/lib/prompts";
 interface Variation {
   label: string;
   description: string;
-  url: string | null;
+  url: string;
+  index: number;
 }
 
 interface IntakeData {
@@ -29,6 +30,8 @@ interface IntakeData {
   preserveNotes: string;
   customDescription: string;
 }
+
+const VARIATION_LABELS = ["Classic", "Dramatic", "Warm", "Editorial"];
 
 function Toast({ message, type, onDismiss }: { message: string; type: "success" | "error" | "info"; onDismiss: () => void }) {
   useEffect(() => { const t = setTimeout(onDismiss, 6000); return () => clearTimeout(t); }, [onDismiss]);
@@ -48,7 +51,7 @@ function AuthWall() {
       <span className="text-5xl mb-6">📸</span>
       <h2 className="font-serif text-2xl text-brown mb-3">Get your first transformation free</h2>
       <p className="text-muted text-sm max-w-sm mb-2">Create a free account and we&apos;ll give you 1 complimentary transformation — no credit card required.</p>
-      <p className="text-sage text-xs font-medium mb-8">🎁 1 free image · All 24 styles · 4 variations per run</p>
+      <p className="text-sage text-xs font-medium mb-8">🎁 1 free image · All 24 styles · Up to 4 variations per credit</p>
       <div className="flex flex-wrap gap-4 justify-center">
         <SignUpButton><button className="bg-terracotta text-white py-3 px-8 rounded font-medium hover:bg-brown transition-colors">Create free account</button></SignUpButton>
         <SignInButton><button className="border border-brown text-brown py-3 px-8 rounded font-medium hover:bg-brown hover:text-cream transition-colors">Sign in</button></SignInButton>
@@ -98,9 +101,8 @@ function IntakeForm({ intake, onChange }: { intake: IntakeData; onChange: (d: In
     <div className="bg-warm-white border border-brown/10 rounded-lg p-5 space-y-5">
       <div>
         <p className="text-xs tracking-[0.12em] uppercase text-muted font-medium mb-0.5">Tell us about the look you want</p>
-        <p className="text-xs text-muted/60">The more you share, the better your 4 variations will be.</p>
+        <p className="text-xs text-muted/60">The more you share, the better your variations will be.</p>
       </div>
-
       <div>
         <label className="block text-sm font-medium text-brown mb-1.5">Overall mood</label>
         <div className="flex flex-wrap gap-2">
@@ -112,7 +114,6 @@ function IntakeForm({ intake, onChange }: { intake: IntakeData; onChange: (d: In
           ))}
         </div>
       </div>
-
       <div>
         <label className="block text-sm font-medium text-brown mb-1.5">Where will this be used?</label>
         <div className="flex flex-wrap gap-2">
@@ -124,86 +125,24 @@ function IntakeForm({ intake, onChange }: { intake: IntakeData; onChange: (d: In
           ))}
         </div>
       </div>
-
       <div>
         <label className="block text-sm font-medium text-brown mb-1.5">Anything specific to preserve or change? <span className="text-muted font-normal">(optional)</span></label>
         <input type="text" value={intake.preserveNotes} onChange={(e) => onChange({ ...intake, preserveNotes: e.target.value })}
           placeholder="e.g. Keep the wine rack in background · Change the table surface · Make it more intimate"
           className="w-full bg-cream border border-brown/15 rounded px-3 py-2 text-sm text-charcoal placeholder:text-muted/50 focus:outline-none focus:border-terracotta/50" />
       </div>
-
       <div>
         <label className="block text-sm font-medium text-brown mb-1.5">Style reference or inspiration <span className="text-muted font-normal">(optional)</span></label>
         <input type="text" value={intake.reference} onChange={(e) => onChange({ ...intake, reference: e.target.value })}
-          placeholder="e.g. Nobu restaurant · Bon Appétit magazine · dark Italian steakhouse · @eater Instagram"
+          placeholder="e.g. Nobu restaurant · Bon Appetit magazine · dark Italian steakhouse"
           className="w-full bg-cream border border-brown/15 rounded px-3 py-2 text-sm text-charcoal placeholder:text-muted/50 focus:outline-none focus:border-terracotta/50" />
       </div>
-
       <div>
         <label className="block text-sm font-medium text-brown mb-1.5">Describe your ideal shot <span className="text-muted font-normal">(optional)</span></label>
         <textarea value={intake.customDescription} onChange={(e) => onChange({ ...intake, customDescription: e.target.value })} rows={2}
-          placeholder="e.g. Moody candlelit wine bar feel, dark marble surface, wine bottles visible in soft bokeh, shot at 45 degrees"
+          placeholder="e.g. Moody candlelit wine bar feel, dark marble surface, wine bottles in soft bokeh, shot at 45 degrees"
           className="w-full bg-cream border border-brown/15 rounded px-3 py-2 text-sm text-charcoal placeholder:text-muted/50 focus:outline-none focus:border-terracotta/50 resize-none" />
       </div>
-    </div>
-  );
-}
-
-function VariationsGrid({ variations, isLoading, selectedIndex, onSelect, onDownload }: {
-  variations: Variation[]; isLoading: boolean; selectedIndex: number | null;
-  onSelect: (i: number) => void; onDownload: (v: Variation) => void;
-}) {
-  const SKELETON_LABELS = ["Classic", "Dramatic", "Warm", "Editorial"];
-
-  if (isLoading) {
-    return (
-      <div className="space-y-3">
-        <p className="text-xs tracking-[0.12em] uppercase text-muted font-medium">Generating your 4 variations…</p>
-        <div className="grid grid-cols-2 gap-4">
-          {SKELETON_LABELS.map((label) => (
-            <div key={label} className="rounded-lg overflow-hidden border border-brown/10 bg-warm-white">
-              <div className="px-3 py-2 border-b border-brown/10"><p className="text-xs font-medium text-brown">{label}</p></div>
-              <div className="aspect-[4/3] bg-cream flex flex-col items-center justify-center gap-2">
-                <div className="w-7 h-7 border-2 border-terracotta border-t-transparent rounded-full animate-spin" />
-                <p className="text-muted text-xs">Generating…</p>
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
-    );
-  }
-
-  return (
-    <div className="space-y-3">
-      <p className="text-xs tracking-[0.12em] uppercase text-muted font-medium">Your 4 Variations — tap to select, then download</p>
-      <div className="grid grid-cols-2 gap-4">
-        {variations.map((v, i) => (
-          <div key={i} onClick={() => v.url && onSelect(i)}
-            className={`rounded-lg overflow-hidden border-2 transition-all cursor-pointer ${selectedIndex === i ? "border-terracotta ring-2 ring-terracotta/20" : "border-brown/10 hover:border-terracotta/40"}`}>
-            <div className="px-3 py-2 border-b border-brown/10 bg-warm-white flex items-center justify-between">
-              <div>
-                <p className="text-xs font-semibold text-brown">{v.label}</p>
-                <p className="text-[10px] text-muted">{v.description}</p>
-              </div>
-              {selectedIndex === i && <span className="text-[10px] bg-terracotta text-white px-2 py-0.5 rounded-full font-medium">Selected</span>}
-            </div>
-            <div className="aspect-[4/3] bg-cream flex items-center justify-center">
-              {v.url
-                ? <img src={v.url} alt={v.label} className="w-full h-full object-contain" />
-                : <p className="text-muted text-xs px-4 text-center">Generation failed — try regenerating</p>}
-            </div>
-          </div>
-        ))}
-      </div>
-      {selectedIndex !== null && variations[selectedIndex]?.url && (
-        <div className="flex gap-3 justify-center pt-1">
-          <button onClick={() => onDownload(variations[selectedIndex])}
-            className="px-8 py-3 rounded bg-terracotta text-white font-medium hover:bg-brown transition-all hover:-translate-y-0.5 hover:shadow-lg text-sm">
-            Download &ldquo;{variations[selectedIndex].label}&rdquo;
-          </button>
-        </div>
-      )}
     </div>
   );
 }
@@ -222,9 +161,10 @@ function AppPageContent() {
   const [isUploading, setIsUploading] = useState(false);
   const [variations, setVariations] = useState<Variation[]>([]);
   const [selectedVariation, setSelectedVariation] = useState<number | null>(null);
+  const [nextVariationIndex, setNextVariationIndex] = useState(0);
+  const [isGenerating, setIsGenerating] = useState(false);
   const [style, setStyle] = useState<string>("editorial");
   const [isDragging, setIsDragging] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
   const [toast, setToast] = useState<{ message: string; type: "success" | "error" | "info" } | null>(null);
   const [intake, setIntake] = useState<IntakeData>({ mood: "", usage: "", reference: "", preserveNotes: "", customDescription: "" });
   const dismissToast = useCallback(() => setToast(null), []);
@@ -245,7 +185,7 @@ function AppPageContent() {
 
   const handleFile = useCallback(async (f: File | null) => {
     if (f && user && credits !== undefined && credits < 1) { setToast({ message: "You need credits to transform images.", type: "info" }); return; }
-    setVariations([]); setSelectedVariation(null);
+    setVariations([]); setSelectedVariation(null); setNextVariationIndex(0);
     if (!f) { setFile(null); setSelectedImageUrl(null); setPreview(null); return; }
     if (user) {
       setIsUploading(true);
@@ -271,17 +211,20 @@ function AppPageContent() {
   const handleDragOver = useCallback((e: React.DragEvent) => { e.preventDefault(); setIsDragging(true); }, []);
   const handleDragLeave = useCallback((e: React.DragEvent) => { e.preventDefault(); setIsDragging(false); }, []);
   const handleInputChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => { const f = e.target.files?.[0]; if (f) void handleFile(f); e.target.value = ""; }, [handleFile]);
-  const handleSelectUpload = useCallback((url: string) => { setFile(null); setSelectedImageUrl(url); setPreview(url); setVariations([]); setSelectedVariation(null); }, []);
+  const handleSelectUpload = useCallback((url: string) => { setFile(null); setSelectedImageUrl(url); setPreview(url); setVariations([]); setSelectedVariation(null); setNextVariationIndex(0); }, []);
 
-  const handleGenerate = async () => {
+  const handleGenerate = async (variationIndex: number) => {
     if (!file && !selectedImageUrl) { setToast({ message: "Please upload a photo first.", type: "error" }); return; }
     if (!user) { setToast({ message: "Please sign in to transform images.", type: "error" }); return; }
-    if (credits !== undefined && credits < 1) { setToast({ message: "No credits remaining. Purchase a plan to continue.", type: "info" }); return; }
-    setIsLoading(true); setVariations([]); setSelectedVariation(null);
+    if (variationIndex === 0 && credits !== undefined && credits < 1) {
+      setToast({ message: "No credits remaining. Purchase a plan to continue.", type: "info" }); return;
+    }
+    setIsGenerating(true);
     try {
       const fd = new FormData();
       if (selectedImageUrl) fd.append("imageUrl", selectedImageUrl); else if (file) fd.append("image", file);
       fd.append("style", style);
+      fd.append("variationIndex", String(variationIndex));
       if (intake.mood) fd.append("mood", intake.mood);
       if (intake.usage) fd.append("usage", intake.usage);
       if (intake.reference) fd.append("reference", intake.reference);
@@ -290,26 +233,32 @@ function AppPageContent() {
       const res = await fetch("/api/transform-variations", { method: "POST", body: fd });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || "Transform failed");
-      if (data.variations) { setVariations(data.variations); setSelectedVariation(0); }
-      else throw new Error("No variations returned");
+      if (data.variation) {
+        setVariations((prev) => [...prev, data.variation]);
+        setSelectedVariation(data.variation.index);
+        setNextVariationIndex(data.hasMore ? data.nextIndex : -1);
+      } else throw new Error("No variation returned");
     } catch (err) {
       setToast({ message: err instanceof Error ? err.message : "Something went wrong", type: "error" });
-    } finally { setIsLoading(false); }
+    } finally { setIsGenerating(false); }
   };
 
   const handleDownload = (variation: Variation) => {
-    if (!variation.url) return;
     const a = document.createElement("a"); a.href = variation.url;
     a.download = `menushoot-${style}-${variation.label.toLowerCase()}-${Date.now()}.png`; a.click();
   };
 
-  const handleReset = () => { setFile(null); setSelectedImageUrl(null); setPreview(null); setVariations([]); setSelectedVariation(null); setIntake({ mood: "", usage: "", reference: "", preserveNotes: "", customDescription: "" }); };
+  const handleReset = () => {
+    setFile(null); setSelectedImageUrl(null); setPreview(null);
+    setVariations([]); setSelectedVariation(null); setNextVariationIndex(0);
+    setIntake({ mood: "", usage: "", reference: "", preserveNotes: "", customDescription: "" });
+  };
 
   const allStyles = Object.values(ART_DIRECTION_STYLES);
   const isSignedIn = isLoaded && !!user;
   const hasVariations = variations.length > 0;
-  const generateDisabled = isLoading || !preview || !isSignedIn || (credits !== undefined && credits < 1);
-  const generateLabel = isLoading ? "Generating 4 variations…" : !isSignedIn ? "Sign in to Generate" : credits !== undefined && credits < 1 ? "No Credits — Buy to Continue" : hasVariations ? "Regenerate (1 credit)" : "Generate 4 Variations (1 credit)";
+  const canGenerateMore = nextVariationIndex >= 0 && nextVariationIndex < 4 && !isGenerating;
+  const isFirstGeneration = variations.length === 0;
 
   return (
     <div className="min-h-screen bg-cream text-charcoal flex flex-col">
@@ -341,10 +290,10 @@ function AppPageContent() {
               <div className="text-center mb-10">
                 <p className="text-terracotta text-xs font-medium tracking-[0.18em] uppercase mb-3">AI-Powered Food Photography</p>
                 <h1 className="font-serif text-3xl md:text-4xl text-brown leading-tight mb-3">
-                  Upload a food photo.<br /><em className="text-terracotta">Get 4 hero shots.</em>
+                  Upload a food photo.<br /><em className="text-terracotta">Get the perfect shot.</em>
                 </h1>
-                <p className="text-muted text-base max-w-md mx-auto">Choose a style, describe what you&apos;re going for, and get 4 professional variations in about 90 seconds.</p>
-                {credits !== undefined && credits > 0 && <p className="text-sage text-xs mt-3 font-medium">{credits} credit{credits !== 1 ? "s" : ""} remaining · 4 variations per credit</p>}
+                <p className="text-muted text-base max-w-md mx-auto">Choose a style, describe what you&apos;re going for, and generate variations until you find the one.</p>
+                {credits !== undefined && credits > 0 && <p className="text-sage text-xs mt-3 font-medium">{credits} credit{credits !== 1 ? "s" : ""} remaining · up to 4 variations per credit</p>}
               </div>
 
               {uploads && uploads.length > 0 && (
@@ -392,6 +341,7 @@ function AppPageContent() {
                 </div>
               ) : (
                 <div className="space-y-5">
+                  {/* Original */}
                   <div className="bg-warm-white border border-brown/10 rounded-lg overflow-hidden">
                     <div className="px-4 py-2.5 border-b border-brown/10 flex items-center justify-between">
                       <p className="text-xs tracking-widest uppercase text-muted font-medium">Original Photo</p>
@@ -400,6 +350,7 @@ function AppPageContent() {
                     <div className="aspect-[16/6] bg-cream"><img src={preview} alt="Original" className="w-full h-full object-contain" /></div>
                   </div>
 
+                  {/* Style picker */}
                   <div className="bg-warm-white border border-brown/10 rounded-lg p-5">
                     <p className="text-xs tracking-[0.12em] uppercase text-muted font-medium mb-3">Art Direction Style</p>
                     <div className="flex flex-wrap gap-2">
@@ -412,17 +363,77 @@ function AppPageContent() {
                     </div>
                   </div>
 
-                  <IntakeForm intake={intake} onChange={setIntake} />
+                  {/* Intake form — only show before first generation */}
+                  {!hasVariations && <IntakeForm intake={intake} onChange={setIntake} />}
 
-                  <div className="flex justify-center">
-                    <button onClick={handleGenerate} disabled={generateDisabled}
-                      className="px-10 py-3.5 rounded bg-terracotta text-white font-medium hover:bg-brown disabled:opacity-50 disabled:cursor-not-allowed transition-all hover:enabled:-translate-y-0.5 hover:enabled:shadow-lg text-sm">
-                      {generateLabel}
-                    </button>
-                  </div>
+                  {/* Generate button */}
+                  {isFirstGeneration && (
+                    <div className="flex justify-center">
+                      <button onClick={() => handleGenerate(0)}
+                        disabled={isGenerating || !isSignedIn || (credits !== undefined && credits < 1)}
+                        className="px-10 py-3.5 rounded bg-terracotta text-white font-medium hover:bg-brown disabled:opacity-50 disabled:cursor-not-allowed transition-all hover:enabled:-translate-y-0.5 hover:enabled:shadow-lg text-sm">
+                        {isGenerating ? "Generating…" : "Generate First Variation (1 credit)"}
+                      </button>
+                    </div>
+                  )}
 
-                  {(isLoading || hasVariations) && (
-                    <VariationsGrid variations={variations} isLoading={isLoading} selectedIndex={selectedVariation} onSelect={setSelectedVariation} onDownload={handleDownload} />
+                  {/* Variations — appear one at a time */}
+                  {hasVariations && (
+                    <div className="space-y-4">
+                      <p className="text-xs tracking-[0.12em] uppercase text-muted font-medium">
+                        Variations — {variations.length} of 4 · tap to select
+                      </p>
+
+                      <div className="grid grid-cols-2 gap-4">
+                        {variations.map((v) => (
+                          <div key={v.index} onClick={() => setSelectedVariation(v.index)}
+                            className={`rounded-lg overflow-hidden border-2 transition-all cursor-pointer ${selectedVariation === v.index ? "border-terracotta ring-2 ring-terracotta/20" : "border-brown/10 hover:border-terracotta/40"}`}>
+                            <div className="px-3 py-2 border-b border-brown/10 bg-warm-white flex items-center justify-between">
+                              <div>
+                                <p className="text-xs font-semibold text-brown">{v.label}</p>
+                                <p className="text-[10px] text-muted">{v.description}</p>
+                              </div>
+                              {selectedVariation === v.index && <span className="text-[10px] bg-terracotta text-white px-2 py-0.5 rounded-full font-medium">Selected</span>}
+                            </div>
+                            <div className="aspect-[4/3] bg-cream">
+                              <img src={v.url} alt={v.label} className="w-full h-full object-contain" />
+                            </div>
+                          </div>
+                        ))}
+
+                        {/* Loading placeholder for next variation */}
+                        {isGenerating && (
+                          <div className="rounded-lg overflow-hidden border border-brown/10 bg-warm-white">
+                            <div className="px-3 py-2 border-b border-brown/10">
+                              <p className="text-xs font-semibold text-brown">{VARIATION_LABELS[nextVariationIndex] ?? "Generating…"}</p>
+                            </div>
+                            <div className="aspect-[4/3] bg-cream flex flex-col items-center justify-center gap-2">
+                              <div className="w-7 h-7 border-2 border-terracotta border-t-transparent rounded-full animate-spin" />
+                              <p className="text-muted text-xs">Generating…</p>
+                            </div>
+                          </div>
+                        )}
+                      </div>
+
+                      {/* Action buttons */}
+                      <div className="flex flex-wrap gap-3 justify-center pt-1">
+                        {selectedVariation !== null && (
+                          <button onClick={() => { const v = variations.find((v) => v.index === selectedVariation); if (v) handleDownload(v); }}
+                            className="px-8 py-3 rounded bg-terracotta text-white font-medium hover:bg-brown transition-all hover:-translate-y-0.5 hover:shadow-lg text-sm">
+                            Download &ldquo;{variations.find((v) => v.index === selectedVariation)?.label}&rdquo;
+                          </button>
+                        )}
+                        {canGenerateMore && (
+                          <button onClick={() => handleGenerate(nextVariationIndex)}
+                            className="px-8 py-3 rounded border border-brown text-brown font-medium hover:bg-brown hover:text-cream transition-all text-sm">
+                            Try next variation ({VARIATION_LABELS[nextVariationIndex]}) →
+                          </button>
+                        )}
+                        <button onClick={handleReset} className="px-8 py-3 rounded border border-muted/50 text-muted hover:border-muted hover:text-brown transition-colors text-sm">
+                          Start over
+                        </button>
+                      </div>
+                    </div>
                   )}
 
                   {credits !== undefined && credits === 1 && (

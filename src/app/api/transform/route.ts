@@ -20,8 +20,7 @@ function initCloudinary() {
   return false;
 }
 
-// The 4 variation angles — each interprets the style differently
-const VARIATION_ANGLES = [
+export const VARIATION_ANGLES = [
   {
     label: "Classic",
     description: "The expected, refined interpretation of the style",
@@ -40,7 +39,7 @@ const VARIATION_ANGLES = [
   {
     label: "Editorial",
     description: "Magazine-ready, precise composition",
-    modifier: "Apply this style as if shooting for a high-end food magazine — precise composition, strong negative space, deliberate prop placement implied, everything intentional. Think Bon Appétit or Food & Wine.",
+    modifier: "Apply this style as if shooting for a high-end food magazine — precise composition, strong negative space, deliberate prop placement implied, everything intentional. Think Bon Appetit or Food & Wine.",
   },
 ];
 
@@ -56,37 +55,80 @@ function buildVariationPrompt(
   }
 ): string {
   let prompt = basePrompt;
-
-  // Inject intake context
-  if (intake.mood) {
-    prompt += ` Overall mood preference: ${intake.mood}.`;
-  }
-  if (intake.usage) {
-    prompt += ` This image will be used for: ${intake.usage}.`;
-  }
-  if (intake.preserveNotes) {
-    prompt += ` Client note — preserve or change: ${intake.preserveNotes}.`;
-  }
-  if (intake.customDescription) {
-    prompt += ` Additional client direction: ${intake.customDescription}.`;
-  }
-  if (intake.reference) {
-    prompt += ` The client referenced this style inspiration: ${intake.reference}.`;
-  }
-
-  // Inject the variation angle modifier
+  if (intake.mood) prompt += ` Overall mood preference: ${intake.mood}.`;
+  if (intake.usage) prompt += ` This image will be used for: ${intake.usage}.`;
+  if (intake.preserveNotes) prompt += ` Client note — preserve or change: ${intake.preserveNotes}.`;
+  if (intake.customDescription) prompt += ` Additional client direction: ${intake.customDescription}.`;
+  if (intake.reference) prompt += ` The client referenced this style inspiration: ${intake.reference}.`;
   prompt += ` VARIATION DIRECTION: ${angle.modifier}`;
-
   return prompt;
 }
 
-async function runSingleTransform(
-  ai: GoogleGenAI,
-  base64: string,
-  mimeType: string,
-  prompt: string
-): Promise<string | null> {
+export async function POST(req: NextRequest) {
   try {
+    const { userId } = await auth();
+    const convexUrl = process.env.NEXT_PUBLIC_CONVEX_URL;
+
+    if (convexUrl) {
+      if (!userId) {
+        return NextResponse.json({ error: "Sign in required to transform images." }, { status: 401 });
+      }
+      const client = new ConvexHttpClient(convexUrl);
+      const credits = await client.query(api.users.getCredits, { clerkId: userId });
+      if (credits < 1) {
+        return NextResponse.json({ error: "No credits remaining. Purchase a plan to continue." }, { status: 402 });
+      }
+    }
+
+    const apiKey = process.env.GOOGLE_GEMINI_API_KEY;
+    if (!apiKey) {
+      return NextResponse.json({ error: "GOOGLE_GEMINI_API_KEY is not set in .env.local" }, { status: 500 });
+    }
+
+    const formData = await req.formData();
+    const file = formData.get("image") as File | null;
+    const imageUrl = formData.get("imageUrl") as string | null;
+    const variationIndex = parseInt((formData.get("variationIndex") as string) || "0", 10);
+    const isFirstCall = variationIndex === 0;
+
+    let buffer: Buffer;
+    let mimeType: string;
+
+    if (imageUrl && imageUrl.startsWith("http")) {
+      const res = await fetch(imageUrl);
+      if (!res.ok) throw new Error("Failed to fetch image from URL");
+      const arr = await res.arrayBuffer();
+      buffer = Buffer.from(arr);
+      mimeType = res.headers.get("content-type") || "image/jpeg";
+    } else if (file && file.type.startsWith("image/")) {
+      buffer = Buffer.from(await file.arrayBuffer());
+      mimeType = file.type;
+    } else {
+      return NextResponse.json({ error: "Please provide a valid image file or imageUrl" }, { status: 400 });
+    }
+
+    const styleId = (formData.get("style") as string) || "editorial";
+    const style = ART_DIRECTION_STYLES[styleId as StyleId] ?? ART_DIRECTION_STYLES["editorial"];
+
+    const intake = {
+      mood: (formData.get("mood") as string) || undefined,
+      usage: (formData.get("usage") as string) || undefined,
+      reference: (formData.get("reference") as string) || undefined,
+      preserveNotes: (formData.get("preserveNotes") as string) || undefined,
+      customDescription: (formData.get("customDescription") as string) || undefined,
+    };
+
+    // Deduct credit only on the first call
+    if (isFirstCall && convexUrl && userId) {
+      const client = new ConvexHttpClient(convexUrl);
+      await client.mutation(api.users.deductCredit, { clerkId: userId });
+    }
+
+    const angle = VARIATION_ANGLES[variationIndex % VARIATION_ANGLES.length];
+    const prompt = buildVariationPrompt(style.prompt, angle, intake);
+    const base64 = buffer.toString("base64");
+    const ai = new GoogleGenAI({ apiKey });
+
     const response = await ai.models.generateContent({
       model: "gemini-3.1-flash-image-preview",
       contents: [
@@ -104,150 +146,57 @@ async function runSingleTransform(
     });
 
     const parts = response.candidates?.[0]?.content?.parts ?? [];
+    let resultDataUrl: string | null = null;
     for (const part of parts) {
       if ("inlineData" in part && part.inlineData?.data) {
-        return `data:${part.inlineData.mimeType || "image/png"};base64,${part.inlineData.data}`;
+        resultDataUrl = `data:${part.inlineData.mimeType || "image/png"};base64,${part.inlineData.data}`;
+        break;
       }
     }
-    return null;
-  } catch {
-    return null;
-  }
-}
 
-export async function POST(req: NextRequest) {
-  try {
-    const { userId } = await auth();
-    const convexUrl = process.env.NEXT_PUBLIC_CONVEX_URL;
+    if (!resultDataUrl) {
+      return NextResponse.json({ error: "Image generation did not return an image. Try again." }, { status: 500 });
+    }
 
-    if (convexUrl) {
-      if (!userId) {
-        return NextResponse.json(
-          { error: "Sign in required to transform images." },
-          { status: 401 }
-        );
+    let finalUrl = resultDataUrl;
+    let publicId = "";
+    if (initCloudinary()) {
+      try {
+        const uploaded = await cloudinary.uploader.upload(resultDataUrl, {
+          folder: "menushoot/variations",
+          resource_type: "image",
+        });
+        finalUrl = uploaded.secure_url;
+        publicId = uploaded.public_id;
+      } catch {
+        // Fall back to base64
       }
-      const client = new ConvexHttpClient(convexUrl);
-      const credits = await client.query(api.users.getCredits, { clerkId: userId });
-      if (credits < 1) {
-        return NextResponse.json(
-          { error: "No credits remaining. Purchase a plan to continue." },
-          { status: 402 }
-        );
+    }
+
+    if (isFirstCall && convexUrl && userId && !finalUrl.startsWith("data:")) {
+      try {
+        const historyClient = new ConvexHttpClient(convexUrl);
+        await historyClient.mutation(api.images.save, {
+          clerkId: userId,
+          publicId,
+          url: finalUrl,
+          style: styleId,
+        });
+      } catch {
+        // Non-fatal
       }
-      // Deduct 1 credit for all 4 variations
-      await client.mutation(api.users.deductCredit, { clerkId: userId });
     }
 
-    const apiKey = process.env.GOOGLE_GEMINI_API_KEY;
-    if (!apiKey) {
-      return NextResponse.json(
-        { error: "GOOGLE_GEMINI_API_KEY is not set in .env.local" },
-        { status: 500 }
-      );
-    }
-
-    const formData = await req.formData();
-    const file = formData.get("image") as File | null;
-    const imageUrl = formData.get("imageUrl") as string | null;
-
-    let buffer: Buffer;
-    let mimeType: string;
-
-    if (imageUrl && imageUrl.startsWith("http")) {
-      const res = await fetch(imageUrl);
-      if (!res.ok) throw new Error("Failed to fetch image from URL");
-      const arr = await res.arrayBuffer();
-      buffer = Buffer.from(arr);
-      mimeType = res.headers.get("content-type") || "image/jpeg";
-    } else if (file && file.type.startsWith("image/")) {
-      buffer = Buffer.from(await file.arrayBuffer());
-      mimeType = file.type;
-    } else {
-      return NextResponse.json(
-        { error: "Please provide a valid image file or imageUrl" },
-        { status: 400 }
-      );
-    }
-
-    const styleId = (formData.get("style") as string) || "editorial";
-    const style = ART_DIRECTION_STYLES[styleId as StyleId] ?? ART_DIRECTION_STYLES["editorial"];
-
-    // Intake fields
-    const intake = {
-      mood: (formData.get("mood") as string) || undefined,
-      usage: (formData.get("usage") as string) || undefined,
-      reference: (formData.get("reference") as string) || undefined,
-      preserveNotes: (formData.get("preserveNotes") as string) || undefined,
-      customDescription: (formData.get("customDescription") as string) || undefined,
-    };
-
-    const base64 = buffer.toString("base64");
-    const ai = new GoogleGenAI({ apiKey });
-
-    // Fire all 4 variations in parallel
-    const variationPromises = VARIATION_ANGLES.map((angle) => {
-      const prompt = buildVariationPrompt(style.prompt, angle, intake);
-      return runSingleTransform(ai, base64, mimeType, prompt);
+    return NextResponse.json({
+      variation: {
+        label: angle.label,
+        description: angle.description,
+        url: finalUrl,
+        index: variationIndex,
+      },
+      hasMore: variationIndex < VARIATION_ANGLES.length - 1,
+      nextIndex: variationIndex + 1,
     });
-
-    const results = await Promise.all(variationPromises);
-
-    // Upload successful results to Cloudinary
-    const cloudinaryReady = initCloudinary();
-    const variations = await Promise.all(
-      results.map(async (dataUrl, i) => {
-        if (!dataUrl) return { label: VARIATION_ANGLES[i].label, description: VARIATION_ANGLES[i].description, url: null };
-
-        if (cloudinaryReady) {
-          try {
-            const uploaded = await cloudinary.uploader.upload(dataUrl, {
-              folder: "menushoot/variations",
-              resource_type: "image",
-            });
-            return {
-              label: VARIATION_ANGLES[i].label,
-              description: VARIATION_ANGLES[i].description,
-              url: uploaded.secure_url,
-              publicId: uploaded.public_id,
-            };
-          } catch {
-            return { label: VARIATION_ANGLES[i].label, description: VARIATION_ANGLES[i].description, url: dataUrl };
-          }
-        }
-
-        return { label: VARIATION_ANGLES[i].label, description: VARIATION_ANGLES[i].description, url: dataUrl };
-      })
-    );
-
-    // Save chosen variation to history when user downloads (tracked separately)
-    // For now, save the first successful one to history
-    if (convexUrl && userId) {
-      const firstSuccess = variations.find((v) => v.url);
-      if (firstSuccess?.url && !firstSuccess.url.startsWith("data:")) {
-        try {
-          const historyClient = new ConvexHttpClient(convexUrl);
-          await historyClient.mutation(api.images.save, {
-            clerkId: userId,
-            publicId: (firstSuccess as { publicId?: string }).publicId ?? "",
-            url: firstSuccess.url,
-            style: styleId,
-          });
-        } catch {
-          // Non-fatal
-        }
-      }
-    }
-
-    const successful = variations.filter((v) => v.url);
-    if (successful.length === 0) {
-      return NextResponse.json(
-        { error: "Image generation did not return any results. Check your API quota." },
-        { status: 500 }
-      );
-    }
-
-    return NextResponse.json({ variations });
   } catch (err: unknown) {
     const message = err instanceof Error ? err.message : "Transform failed";
     const status = (err as { status?: number })?.status ?? 500;
