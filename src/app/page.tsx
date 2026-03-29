@@ -21,6 +21,27 @@ Best time to meet (timezone):
 Thanks`
 )}`;
 
+const DONE_FOR_YOU_MAILTO = `mailto:hello@menushoot.ai?subject=${encodeURIComponent(
+  "Done-For-You Inquiry"
+)}&body=${encodeURIComponent(
+  `Hi Andrew,
+
+I'm interested in the Done-For-You package. Here's a bit about my situation:
+
+Restaurant name:
+Location:
+How many menu items do you have?
+What platforms are you on? (UberEats, DoorDash, website, Instagram):
+
+Do you have existing food photos we can work from? (links, attachments later, or describe what you have):
+
+Style / vibe you're going for:
+
+Anything else we should know?
+
+Thanks`
+)}`;
+
 export default function LandingPage() {
   return (
     <div className="min-h-screen bg-cream text-charcoal">
@@ -239,7 +260,7 @@ export default function LandingPage() {
               <h3 className="font-serif text-lg text-cream mb-2">Done-For-You</h3>
               <p className="text-cream/70 text-sm leading-relaxed mb-4">Andrew personally transforms 10 menu items for you. Consulting call included.</p>
               <p className="font-serif text-2xl text-cream mb-5">$599</p>
-              <a href="mailto:hello@menushoot.ai?subject=Done-For-You"
+              <a href={DONE_FOR_YOU_MAILTO}
                 className="block w-full text-center py-3 px-6 rounded bg-terracotta text-white font-medium hover:bg-terra-light transition-colors">
                 Get Started
               </a>
