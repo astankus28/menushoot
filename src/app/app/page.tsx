@@ -17,6 +17,7 @@ import { BuyButton } from "@/components/BuyButton";
 import { ART_DIRECTION_STYLES } from "@/lib/prompts";
 import { VARIATION_ANGLES } from "@/lib/variationAngles";
 import { compressImageForUpload } from "@/lib/compressImageForUpload";
+import { parseApiResponse, apiErrorMessage } from "@/lib/parseApiResponse";
 
 interface Variation {
   label: string;
@@ -196,15 +197,16 @@ function AppPageContent() {
         const fd = new FormData();
         fd.append("image", toSend);
         const res = await fetch("/api/upload", { method: "POST", body: fd });
-        const data = await res.json().catch(() => ({}));
-        if (!res.ok) {
-          if (res.status === 413) {
-            throw new Error("Photo is still too large after compression. Try a smaller image or export as JPEG.");
-          }
-          throw new Error((data as { error?: string }).error || "Upload failed");
+        const parsed = await parseApiResponse(res);
+        if (!parsed.ok) {
+          throw new Error(apiErrorMessage(parsed, "Couldn’t upload that photo. Try again."));
         }
-        if (data.url) { setSelectedImageUrl(data.url); setPreview(data.url); setFile(null); }
-        else throw new Error("No URL returned");
+        const url = parsed.json && typeof parsed.json.url === "string" ? parsed.json.url : null;
+        if (url) {
+          setSelectedImageUrl(url);
+          setPreview(url);
+          setFile(null);
+        } else throw new Error("No URL returned");
       } catch (err) {
         setToast({ message: err instanceof Error ? err.message : "Upload failed", type: "error" });
         const reader = new FileReader(); reader.onload = () => setPreview(reader.result as string); reader.readAsDataURL(f);
@@ -244,17 +246,18 @@ function AppPageContent() {
       if (intake.preserveNotes) fd.append("preserveNotes", intake.preserveNotes);
       if (intake.customDescription) fd.append("customDescription", intake.customDescription);
       const res = await fetch("/api/transform-variations", { method: "POST", body: fd });
-      const data = await res.json().catch(() => ({}));
-      if (!res.ok) {
-        if (res.status === 413) {
-          throw new Error("Image payload too large. Try a smaller photo or re-upload after saving as JPEG.");
-        }
-        throw new Error((data as { error?: string }).error || "Transform failed");
+      const parsed = await parseApiResponse(res);
+      if (!parsed.ok) {
+        throw new Error(apiErrorMessage(parsed, "Couldn’t generate that image. Try again."));
       }
-      if (data.variation) {
-        setVariations((prev) => [...prev, data.variation]);
-        setSelectedVariation(data.variation.index);
-        setNextVariationIndex(data.hasMore ? data.nextIndex : -1);
+      const data = parsed.json;
+      const variation = data?.variation as Variation | undefined;
+      const hasMore = data?.hasMore === true;
+      const nextIndex = typeof data?.nextIndex === "number" ? data.nextIndex : -1;
+      if (variation && typeof variation.index === "number") {
+        setVariations((prev) => [...prev, variation]);
+        setSelectedVariation(variation.index);
+        setNextVariationIndex(hasMore ? nextIndex : -1);
       } else throw new Error("No variation returned");
     } catch (err) {
       setToast({ message: err instanceof Error ? err.message : "Something went wrong", type: "error" });

@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { parseApiResponse, apiErrorMessage } from "@/lib/parseApiResponse";
 
 type ProductId = "trial" | "starter" | "full" | "agency";
 
@@ -35,16 +36,18 @@ export function BuyButton({
         body: JSON.stringify({ productId }),
         credentials: "include",
       });
-      const data = await res.json().catch(() => ({}));
-      if (!res.ok) {
+      const parsed = await parseApiResponse(res);
+      if (!parsed.ok) {
         if (res.status === 401) {
           window.location.href = "/sign-in?redirect_url=" + encodeURIComponent("/app");
           return;
         }
-        throw new Error(data.error || "Checkout failed");
+        throw new Error(apiErrorMessage(parsed, "Checkout failed"));
       }
-      if (data.url) {
-        window.location.href = data.url;
+      const checkoutUrl =
+        parsed.json && typeof parsed.json.url === "string" ? parsed.json.url : null;
+      if (checkoutUrl) {
+        window.location.href = checkoutUrl;
       } else {
         throw new Error("No redirect URL from Stripe");
       }
