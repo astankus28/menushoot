@@ -31,4 +31,22 @@ export const STYLE_SLIDER_AFTER_URLS: Partial<Record<StyleId, string>> = {
     "https://res.cloudinary.com/dnhcs54zz/image/upload/v1773438353/menushoot/transforms/ww2psxhcqnu5tniqly5x.png",
   brightAiry:
     "https://res.cloudinary.com/dnhcs54zz/image/upload/v1773438438/menushoot/transforms/uza5ayrqkj39ls2qeaki.png",
+  uberEats:
+    "https://res.cloudinary.com/dnhcs54zz/image/upload/v1774835716/UberEats_hme529.png",
+  japaneseMin:
+    "https://res.cloudinary.com/dnhcs54zz/image/upload/v1774835719/Japanese_Minimal_m1as9g.png",
+  latinVibrancy:
+    "https://res.cloudinary.com/dnhcs54zz/image/upload/v1774835721/Latin_Vibrancy_o3ubdf.png",
+  mediterranean:
+    "https://res.cloudinary.com/dnhcs54zz/image/upload/v1774835720/Mediterranean_xuk0l0.png",
+  bbq:
+    "https://res.cloudinary.com/dnhcs54zz/image/upload/v1774835719/BBQ_Smokehouse_gkckak.png",
+  taco:
+    "https://res.cloudinary.com/dnhcs54zz/image/upload/v1774835718/Taqueria_mlgqrc.png",
+  happyHour:
+    "https://res.cloudinary.com/dnhcs54zz/image/upload/v1774835715/Happy_Hour_ls0qhc.png",
+  brunch:
+    "https://res.cloudinary.com/dnhcs54zz/image/upload/v1774835714/Brunch_y7pv0z.png",
+  whiteBg:
+    "https://res.cloudinary.com/dnhcs54zz/image/upload/v1773625144/Gemini_Generated_Image_o0slsro0slsro0sl_viwyck.png",
 };
