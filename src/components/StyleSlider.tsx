@@ -2,88 +2,17 @@
 
 import { useState, useRef, useCallback, useEffect } from "react";
 import Image from "next/image";
+import { ART_DIRECTION_STYLES, type StyleId } from "@/lib/prompts";
+import {
+  STYLE_SLIDER_AFTER_URLS,
+  STYLE_SLIDER_BEFORE_URL,
+} from "@/data/styleSliderAfterUrls";
 
-const BEFORE_URL = "https://res.cloudinary.com/dnhcs54zz/image/upload/v1773419029/IMG_8010_sguady.jpg";
-
-// ── Swap in your Cloudinary URLs for each style ──────────────────────────────
-// Replace the placeholder strings below with your actual after-photo URLs.
-// Any style without a real URL will show a "coming soon" state gracefully.
-const STYLES: { id: string; label: string; description: string; url: string }[] = [
-  {
-    id: "editorial",
-    label: "Editorial",
-    description: "Clean, high-end menu shot",
-    url: "https://res.cloudinary.com/dnhcs54zz/image/upload/v1773420190/menushoot/transforms/u3tbgqmlixnsivxyr99c.png",
-  },
-  {
-    id: "natural",
-    label: "Natural",
-    description: "Bright, fresh, organic",
-    url: "https://res.cloudinary.com/dnhcs54zz/image/upload/v1773420158/menushoot/transforms/gcviqjyke3lw30usttmo.png",
-  },
-  {
-    id: "moody",
-    label: "Moody",
-    description: "Dramatic, cinematic shadows",
-    url: "https://res.cloudinary.com/dnhcs54zz/image/upload/v1773420077/menushoot/transforms/g4a0hn6gkjrcfdxwm44o.png",
-  },
-  {
-    id: "goldenHour",
-    label: "Golden Hour",
-    description: "Late afternoon light, long shadows",
-    url: "https://res.cloudinary.com/dnhcs54zz/image/upload/v1773589548/menushoot/transforms/jnyebracaziaewnhq7w1.png",
-  },
-  {
-    id: "minimal",
-    label: "Minimal",
-    description: "Scandinavian, clean, app-ready",
-    url: "https://res.cloudinary.com/dnhcs54zz/image/upload/v1773419984/menushoot/transforms/tfhrpdlbtkwjxgpnkxrf.png",
-  },
-  {
-    id: "fineDining",
-    label: "Fine Dining",
-    description: "Luxurious, Michelin-level refined",
-    url: "https://res.cloudinary.com/dnhcs54zz/image/upload/v1773418320/menushoot/transforms/lbbthufhuhvfvyspcvli.png",
-  },
-  {
-    id: "streetFood",
-    label: "Street Food",
-    description: "Bold, punchy, delivery-optimized",
-    url: "https://res.cloudinary.com/dnhcs54zz/image/upload/v1773428209/menushoot/transforms/d9mfggbusmi2opmb1bu5.png",
-  },
-  {
-    id: "rustic",
-    label: "Rustic",
-    description: "Earthy, artisan, farm-to-table",
-    url: "https://res.cloudinary.com/dnhcs54zz/image/upload/v1773428256/menushoot/transforms/mepkphyyybtbvgt1wvae.png",
-  },
-  {
-    id: "socialMedia",
-    label: "Social Media",
-    description: "Instagram & TikTok optimized",
-    url: "https://res.cloudinary.com/dnhcs54zz/image/upload/v1773438353/menushoot/transforms/ww2psxhcqnu5tniqly5x.png",
-  },
-  {
-    id: "brightAiry",
-    label: "Bright & Airy",
-    description: "Light, pastel, café & brunch feel",
-    url: "https://res.cloudinary.com/dnhcs54zz/image/upload/v1773438438/menushoot/transforms/uza5ayrqkj39ls2qeaki.png",
-  },
-  { id: "uberEats",      label: "UberEats",            description: "Click-optimized for UberEats grid",      url: "" },
-  { id: "doorDash",      label: "DoorDash",             description: "Lifestyle-forward delivery hero",        url: "" },
-  { id: "japaneseMin",   label: "Japanese Minimal",     description: "Slate surfaces, negative space, zen",    url: "" },
-  { id: "latinVibrancy", label: "Latin Vibrancy",       description: "Bold, festive, Cuban/Colombian/Peruvian", url: "" },
-  { id: "mediterranean", label: "Mediterranean",        description: "Terracotta, olive, coastal warmth",      url: "" },
-  { id: "bbq",           label: "BBQ & Smokehouse",     description: "Char, cast iron, ember light",           url: "" },
-  { id: "taco",          label: "Taqueria",             description: "Bright, authentic Mexican street energy", url: "" },
-  { id: "happyHour",     label: "Happy Hour",           description: "Warm bar light, social energy",          url: "" },
-  { id: "brunch",        label: "Brunch",               description: "Lazy morning light, weekend energy",     url: "" },
-  { id: "lateNight",     label: "Late Night",           description: "Dark, neon-lit, midnight craveable",     url: "" },
-  { id: "whiteBg",       label: "White Background",     description: "Clean product shot, menu-builder ready", url: "" },
-  { id: "overhead",      label: "Overhead Flat Lay",    description: "Top-down, styled, square-crop perfect",  url: "" },
-  { id: "steamTexture",  label: "Steam & Texture",      description: "Heat, glisten, just-served freshness",   url: "" },
-  { id: "dessert",       label: "Dessert & Pastry",     description: "Parisian patisserie, sugar and gloss",   url: "" },
-];
+const STYLES = (Object.keys(ART_DIRECTION_STYLES) as StyleId[]).map((id) => {
+  const s = ART_DIRECTION_STYLES[id];
+  const url = STYLE_SLIDER_AFTER_URLS[id]?.trim() ?? "";
+  return { id, label: s.label, description: s.description, url };
+});
 
 // ── Drag slider ───────────────────────────────────────────────────────────────
 function BeforeAfterSlider({ before, after }: { before: string; after: string }) {
@@ -178,7 +107,6 @@ function ComingSoon({ label }: { label: string }) {
 
 // ── Main export ───────────────────────────────────────────────────────────────
 export function StyleSlider() {
-  const available = STYLES.filter((s) => s.url.trim() !== "");
   const [active, setActive] = useState<string>("editorial");
 
   const current = STYLES.find((s) => s.id === active) ?? STYLES[0];
@@ -200,7 +128,7 @@ export function StyleSlider() {
         {/* Left: slider */}
         <div className="px-6 md:pl-10 md:pr-6 pb-8 md:pb-10">
           {current.url ? (
-            <BeforeAfterSlider before={BEFORE_URL} after={current.url} />
+            <BeforeAfterSlider before={STYLE_SLIDER_BEFORE_URL} after={current.url} />
           ) : (
             <ComingSoon label={current.label} />
           )}
