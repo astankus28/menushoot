@@ -48,5 +48,5 @@ export const STYLE_SLIDER_AFTER_URLS: Partial<Record<StyleId, string>> = {
   brunch:
     "https://res.cloudinary.com/dnhcs54zz/image/upload/v1774835714/Brunch_y7pv0z.png",
   whiteBg:
-    "https://res.cloudinary.com/dnhcs54zz/image/upload/v1773625144/Gemini_Generated_Image_o0slsro0slsro0sl_viwyck.png",
+    "https://res.cloudinary.com/dnhcs54zz/image/upload/v1774836589/Gemini_Generated_Image_o0slsro0slsro0sl_viwyck.png",
 };
